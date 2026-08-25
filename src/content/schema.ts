@@ -268,9 +268,16 @@ export type TraitPick = z.infer<typeof traitPickSchema>;
 
 /**
  * Die assignment: each stat gets a die. Advisory — a build may be incomplete or
- * house-ruled, so this is a partial map, not an enforced bijection.
+ * house-ruled, so every slot is optional and no bijection is enforced.
  */
-export const statDiceSchema = z.record(statEnum, dieEnum);
+export const statDiceSchema = z.object({
+  brains: dieEnum.optional(),
+  brawn: dieEnum.optional(),
+  charm: dieEnum.optional(),
+  fight: dieEnum.optional(),
+  flight: dieEnum.optional(),
+  grit: dieEnum.optional(),
+});
 export type StatDice = z.infer<typeof statDiceSchema>;
 
 /**
