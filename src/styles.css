@@ -486,26 +486,82 @@ button {
 }
 
 /* Resource cheat sheets ------------------------------------------------- */
-.cheats {
-  margin-top: 14px;
-  border-top: 1px dashed var(--line);
-  padding-top: 4px;
+/* Mobile-first: one column; each counter stacks over its own cheat sheet.
+   Wider screens put Momentum and Exposure side by side. */
+.resource-cols {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
 }
-.cheat {
-  border-bottom: 1px solid var(--line);
+@media (min-width: 560px) {
+  .resource-cols {
+    grid-template-columns: 1fr 1fr;
+  }
 }
-.cheat:last-child {
-  border-bottom: none;
+.resource-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
 }
+.resource-col .counter {
+  flex: none;
+}
+
 .cheat > summary {
   cursor: pointer;
+  list-style: none;
   min-height: var(--tap);
   display: flex;
   align-items: center;
+  gap: 8px;
+  padding: 0 12px;
   font-size: 12px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink-soft);
+  background: var(--paper);
+  border: 1px solid var(--ink-soft);
+  border-radius: var(--radius);
+}
+.cheat > summary::-webkit-details-marker {
+  display: none;
+}
+/* Rotating caret so it's obviously expandable. */
+.cheat > summary::before {
+  content: '';
+  flex: none;
+  width: 0;
+  height: 0;
+  border-left: 7px solid currentColor;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  transition: transform 150ms ease;
+}
+.cheat[open] > summary {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.cheat[open] > summary::before {
+  transform: rotate(90deg);
+}
+.cheat > summary::after {
+  content: 'tap';
+  margin-left: auto;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  opacity: 0.6;
+}
+.cheat[open] > summary::after {
+  content: 'close';
+}
+.cheat > *:not(summary) {
+  padding: 0 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cheat > summary::before {
+    transition: none;
+  }
 }
 .cheat-meta {
   font-size: 12px;

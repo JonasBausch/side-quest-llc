@@ -123,27 +123,33 @@ export function Tracker({ def, session, onChange }: TrackerProps) {
 
       {/* Momentum + Exposure ----------------------------------------- */}
       <section className="card">
-        <div className="counters">
-          <Counter
-            label="Momentum"
-            value={session.momentum}
-            note={session.momentum >= MAX_MOMENTUM ? 'at cap (10)' : undefined}
-            onDec={() => patch({ momentum: Math.max(0, session.momentum - 1) })}
-            onInc={() =>
-              patch({ momentum: Math.min(MAX_MOMENTUM, session.momentum + 1) })
-            }
-          />
-          <Counter
-            label="Exposure"
-            value={session.exposure}
-            note={session.exposure >= 3 ? 'consequence at 3' : undefined}
-            onDec={() => patch({ exposure: Math.max(0, session.exposure - 1) })}
-            onInc={() => patch({ exposure: session.exposure + 1 })}
-          />
-        </div>
-        <div className="cheats">
-          <MomentumCheat momentum={session.momentum} />
-          <ExposureCheat exposure={session.exposure} />
+        <div className="resource-cols">
+          <div className="resource-col">
+            <Counter
+              label="Momentum"
+              value={session.momentum}
+              note={session.momentum >= MAX_MOMENTUM ? 'at cap (10)' : undefined}
+              onDec={() =>
+                patch({ momentum: Math.max(0, session.momentum - 1) })
+              }
+              onInc={() =>
+                patch({ momentum: Math.min(MAX_MOMENTUM, session.momentum + 1) })
+              }
+            />
+            <MomentumCheat momentum={session.momentum} />
+          </div>
+          <div className="resource-col">
+            <Counter
+              label="Exposure"
+              value={session.exposure}
+              note={session.exposure >= 3 ? 'consequence at 3' : undefined}
+              onDec={() =>
+                patch({ exposure: Math.max(0, session.exposure - 1) })
+              }
+              onInc={() => patch({ exposure: session.exposure + 1 })}
+            />
+            <ExposureCheat exposure={session.exposure} />
+          </div>
         </div>
       </section>
 
