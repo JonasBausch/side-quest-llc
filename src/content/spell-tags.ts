@@ -4,9 +4,12 @@ import type { SpellTag } from './schema';
  * Shared spell tags, referenced by id from trainings' `availableTagIds`.
  * Transcribed from docs/rules-v4.0.md ("Spell Tags" per training + the Quick
  * Index). Tags are shared across trainings and never duplicated inline; this
- * list grows one training's worth at a time as trainings are added.
+ * list grows one training's worth at a time as trainings are added, and is kept
+ * alphabetical by id.
  *
- * Added with Field Tinkerer: ANCHOR, OMEN, SPARK, STEP, UNRAVEL.
+ * Introduced by:
+ * - Field Tinkerer: ANCHOR, OMEN, SPARK, STEP, UNRAVEL
+ * - Negotiator:     BANISH, GLAMOUR
  */
 export const spellTags = [
   {
@@ -15,6 +18,20 @@ export const spellTags = [
     small: `Declare one reality rule that applies to one small focus (one object/one doorway/one 5-ft spot) for a beat.`,
     medium: `Declare one reality rule that applies to a defined section of the scene (one room corner / one corridor segment) for a segment.`,
     large: `Declare one reality rule that applies to an entire room for the scene (until the scene ends or it's narratively broken).`,
+  },
+  {
+    id: 'banish',
+    name: 'Banish',
+    small: `Cleanse one object of possession; the presence is forced out and cannot cling to that object for a beat.`,
+    medium: `Cleanse up to 3 objects, or cleanse one large object (e.g., a couch, a door, a vehicle); the presence is forced out and cannot re-enter those objects for a segment.`,
+    large: `Cleanse all possessed objects within one defined room/zone; presences are forced out and cannot re-enter objects in that space for the scene.`,
+  },
+  {
+    id: 'glamour',
+    name: 'Glamour',
+    small: `Make yourself or one item seem like a plausible replacement (staff/guest/contractor/etc.) to any observers.`,
+    medium: `Make up to 3 people (you + 2) seem like a plausible replacement (e.g., a team/unit) to any observers.`,
+    large: `Make the whole group or space seem like a plausible replacement to any observers.`,
   },
   {
     id: 'omen',
