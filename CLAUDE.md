@@ -1,0 +1,147 @@
+# CLAUDE.md
+
+Project instructions for Claude Code. Read this before making changes.
+
+## What this is
+
+A character builder and live session tracker for **SideQuest**, a homebrew
+tabletop RPG. It is used by a small cast during recorded actual-play sessions,
+often on phones, sometimes with bad wifi.
+
+The rules live in `docs/rules-v4.0.md`. That file is the GM's document, copied
+verbatim. It is the source of truth for all game content. Do not edit it. When
+the GM ships a new version, it lands as a new file and the diff drives the
+content update.
+
+## Non-negotiables
+
+**Do not model game mechanics.** Store rules text as prose. The only structured
+fields are metadata: name, frequency, prerequisite, cost. Never write code that
+resolves an effect, computes a roll outcome, or enforces a rule. The ruleset is
+an unfinished draft and tables houserule constantly. Anything encoded as logic
+becomes wrong and has to be unwound.
+
+Concretely: `{ id, name, frequency: 'perScene', text: 'Make a broken thing
+work for one beat...' }` is right. A `applyBlowback()` function is wrong.
+
+**Content is data, code is a renderer.** Every SideQuest-specific fact lives in
+`src/content/`. Components must be generic over that data. If a component names
+a specific training, gear node, or spell tag, that is a bug.
+
+**Validation is advisory, never blocking.** Warn on an illegal build, do not
+prevent it. A tool that refuses a GM's ruling gets abandoned after one session.
+
+**No backend.** No accounts, no database, no auth. The GM tracks the shared
+table state herself. Players only track their own.
+
+## Architecture
+
+Vite + React + TypeScript. Deployed to GitHub Pages via GitHub Actions.
+
+Two data lifecycles, kept strictly separate:
+
+- **Character definition.** Training, path, nodes taken, trope, strength, flaw,
+  die assignment, name. Changes about once per job. Serialized, compressed, and
+  stored in the URL fragment so a character is a shareable link. Also
+  importable and exportable as JSON.
+- **Session state.** Momentum, conditions, Wyrd, Exposure, which
+  once-per-scene uses are spent. Changes constantly. Lives in localStorage,
+  keyed by character id. Never shared.
+
+Do not let these leak into each other. A session reset must not touch the
+definition, and loading a share link must not clobber someone's live state.
+
+## Layout
+
+```
+docs/rules-v4.0.md      GM's ruleset, verbatim, read-only
+src/content/schema.ts   Zod schemas and inferred types
+src/content/trainings/  One file per training
+src/content/*.ts        Spell tags, tropes, strengths, flaws, conditions, wyrd
+src/lib/                Serialization, storage, validation
+src/components/         Generic renderers
+```
+
+## Content model
+
+All ten trainings share one shape: a specialty, five Wyrd path nodes, five
+Mundane path nodes, and a list of available spell tags. Spell tags are shared
+across trainings and referenced by id, never duplicated inline.
+
+`frequency` is one of `perScene`, `perJob`, `passive`, `counter`. That enum is
+the entire mechanical abstraction. Resist adding to it.
+
+Every stored character carries a `rulesVersion`. When it does not match the
+current ruleset, show a banner. Do not migrate silently.
+
+## Known gaps in the ruleset
+
+The draft has real holes. Do not paper over them in code, surface them in the
+UI as GM-call notes:
+
+- Scale slots are referenced as a spendable resource but never defined.
+- The casting roll formula is ambiguous, stat die plus Wyrd die or Wyrd die
+  alone.
+- Starting nodes are unclear. Creation implies a Keystone, the glossary says
+  Keystone is the reward for finishing a path.
+- The glossary describes Wyrd tiers 0 to 3 and a Spellcraft node that the
+  training tables do not contain.
+- Whether two conditions on the same stat stack is unwritten.
+
+Where the rules conflict, the training tables win over the glossary, and a note
+goes in the UI.
+
+## The prototype
+
+`docs/prototype/jd-field-record.html` is a single-character throwaway built
+before this repo existed. It is a **design reference only**. It is not part of
+the build, it is not to be ported, and nothing should import from it.
+
+Take from it:
+
+- The interaction model. Conditions cross-reference the stats they penalise, so
+  toggling one highlights the affected dice with the reason. This is the single
+  most useful thing it does at the table.
+- Scene-state feedback. The Wyrd track changes the page background at 4 and
+  again at 6, readable in peripheral vision without focusing on it.
+- Reset semantics. "New scene" clears per-scene uses and zeroes Wyrd. "New job"
+  clears everything including Exposure. These map to real table moments.
+- Progression as unlock. Nodes not yet taken are visible but inert, so players
+  can see what a promotion buys them.
+- The visual direction: work-order stock, condensed industrial display type,
+  carbon-copy accent. Reuse the direction, not the CSS.
+
+Ignore from it:
+
+- **`window.storage`.** That is a Claude artifact API and does not exist in a
+  browser. Use localStorage.
+- Vanilla JS, string-built DOM, and global state. All of it is throwaway.
+- Everything hardcoded to one character, one training, one path.
+
+## Working conventions
+
+Transcription is the bulk of the work and it fails silently. Therefore:
+
+- **One training per commit.** Small diffs are reviewable against the PDF.
+  A thousand-line content dump is not.
+- Quote rules text closely. Light copyedits for typos are fine. Do not
+  paraphrase, reorder, or "improve" wording.
+- Every training must pass structural tests: a specialty, five gear nodes,
+  five wyrd nodes, a non-empty tag list, and tag ids that resolve.
+- Field Tinkerer first, then Negotiator. Negotiator is structurally unusual
+  and will stress the schema early, while it is still cheap to change.
+
+## UI
+
+Mobile-first. The primary use is a phone held in one hand during a recording,
+so touch targets are generous and the live-state controls sit above the fold.
+Include a print stylesheet, someone will want paper.
+
+Respect `prefers-reduced-motion`, keep keyboard focus visible, and make sure
+the whole builder is usable without a pointer.
+
+## Before you start
+
+If the schema does not exist yet, write it and stop. Do not scaffold the app
+around an unreviewed schema. Every content file inherits its shape, and
+reworking it later means redoing all of them.
