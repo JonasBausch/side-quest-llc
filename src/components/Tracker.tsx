@@ -72,7 +72,9 @@ export function Tracker({ def, session, onChange }: TrackerProps) {
       {/* Wyrd --------------------------------------------------------- */}
       <section className="card">
         <div className="row-between">
-          <h2>Wyrd</h2>
+          <h2>
+            Wyrd <span className="cap">scene pressure 0–6</span>
+          </h2>
           <div className="stepper">
             <button
               className="round"
@@ -155,7 +157,9 @@ export function Tracker({ def, session, onChange }: TrackerProps) {
 
       {/* Conditions + stat cross-reference --------------------------- */}
       <section className="card">
-        <h2>Conditions</h2>
+        <h2>
+          Conditions <span className="cap">−1 to relevant rolls</span>
+        </h2>
         <div className="conditions">
           {conditions.map((cond) => {
             const on = activeIds.has(cond.id);
@@ -201,7 +205,9 @@ export function Tracker({ def, session, onChange }: TrackerProps) {
 
       {/* Uses --------------------------------------------------------- */}
       <section className="card">
-        <h2>Uses</h2>
+        <h2>
+          Uses <span className="cap">per scene · per job</span>
+        </h2>
         {abilities.length === 0 && (
           <p className="muted small">
             No once-per-scene or once-per-job abilities taken yet.

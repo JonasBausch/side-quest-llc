@@ -56,8 +56,8 @@ export function App() {
     <div className={`app wyrd-${tier}`}>
       <header className="topbar">
         <div className="brand">
-          <span className="brand-mark">SideQuest</span>
-          <span className="brand-sub">Field Record</span>
+          <span className="brand-mark">SideQuest LLC / Field Record</span>
+          <span className="brand-name">{def.name.trim() || 'Unnamed Agent'}</span>
         </div>
         <button className="ghost" onClick={copyShare}>
           {copied ? 'Link copied' : 'Share'}

@@ -1,20 +1,34 @@
 /*
  * SideQuest Field Record — mobile-first, one-handed on a phone.
- * Work-order stock, condensed industrial display type, carbon-copy accent.
- * (Visual direction borrowed from the prototype; none of its CSS reused.)
+ * Visual direction after the jd-field-record prototype: warm carbon-copy
+ * stock, monospace label chrome, heavy display values, a mauve label accent
+ * with rust for danger and an ochre mid-tone. Direction reused, not its CSS.
+ * System fonts only — no webfont download on bad table wifi.
  */
 
 :root {
-  --paper: #f4f1e8;
-  --ink: #1b1a17;
-  --ink-soft: #4a4640;
-  --line: #cbc4b2;
-  --accent: #b5321f; /* carbon-copy red */
-  --accent-ink: #7c2415;
-  --ok: #2f6b4f;
-  --warn: #a4600d;
-  --field: #fffdf7;
-  --radius: 4px;
+  --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas,
+    'Liberation Mono', monospace;
+  --sans: 'Helvetica Neue', Arial, system-ui, sans-serif;
+
+  --paper: #d8cec8; /* warm carbon-copy stock */
+  --field: #e5ded8; /* card surface */
+  --field-2: #efe9e3; /* inputs, inset tiles */
+  --ink: #1c1a17;
+  --ink-soft: #736c64;
+  --line: #b7aca3;
+
+  --accent: #7d3f6e; /* mauve — labels, selection, momentum spends */
+  --accent-ink: #5c2d51;
+  --danger: #a5381f; /* rust — penalties, Wyrd 6, new job */
+  --ochre: #c0912e;
+  --warn: #9a6a12;
+
+  --wyrd-low: #6d3f63; /* 0–1 */
+  --wyrd-mid: #c0912e; /* 2–5 */
+  --wyrd-high: #a5381f; /* 6 */
+
+  --radius: 3px;
   --tap: 44px;
 
   --bg: var(--paper);
@@ -24,7 +38,6 @@
 * {
   box-sizing: border-box;
 }
-
 html,
 body {
   margin: 0;
@@ -34,7 +47,7 @@ body {
 body {
   background: var(--bg);
   color: var(--ink);
-  font-family: 'Helvetica Neue', 'Arial Narrow', system-ui, sans-serif;
+  font-family: var(--sans);
   font-size: 16px;
   line-height: 1.4;
   -webkit-text-size-adjust: 100%;
@@ -47,20 +60,19 @@ body {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* Scene-state feedback: page reskins as Wyrd climbs, readable peripherally. */
+/* Scene-state feedback: the stock warms as Wyrd climbs, read peripherally. */
 .wyrd-calm {
-  --bg: #f4f1e8;
+  --bg: #d8cec8;
 }
 .wyrd-distortion {
-  --bg: #efe9dc;
+  --bg: #d8c9c1;
 }
 .wyrd-hazard {
-  --bg: #e9ddcf;
+  --bg: #d9c2b6;
 }
 .wyrd-surge {
-  --bg: #e7cdbf;
+  --bg: #ddb8a8;
 }
-
 @media (prefers-reduced-motion: reduce) {
   .app {
     transition: none;
@@ -74,34 +86,36 @@ body {
   justify-content: space-between;
   gap: 12px;
   padding: 12px 16px;
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
   background: var(--bg);
   position: sticky;
   top: 0;
   z-index: 10;
 }
-
 .brand {
   display: flex;
   flex-direction: column;
-  line-height: 1;
+  line-height: 1.1;
+  min-width: 0;
 }
 .brand-mark {
-  font-weight: 800;
+  font-family: var(--mono);
+  font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  font-size: 18px;
+  color: var(--accent);
 }
-.brand-sub {
-  font-size: 11px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--accent-ink);
-  margin-top: 2px;
+.brand-name {
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .banner {
-  background: #fbeecf;
+  background: #efe0c4;
   border-bottom: 1px solid var(--warn);
   color: #5a3d05;
   padding: 10px 16px;
@@ -111,10 +125,9 @@ body {
 /* Tabs ------------------------------------------------------------------ */
 .tabs {
   display: flex;
-  gap: 0;
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
   position: sticky;
-  top: 53px;
+  top: 56px;
   background: var(--bg);
   z-index: 9;
 }
@@ -123,11 +136,11 @@ body {
   min-height: var(--tap);
   border: none;
   background: transparent;
-  font: inherit;
+  font-family: var(--mono);
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--ink-soft);
   padding: 12px;
   cursor: pointer;
@@ -139,7 +152,7 @@ body {
 
 .screen {
   padding: 12px;
-  max-width: 720px;
+  max-width: 760px;
   margin: 0 auto;
 }
 
@@ -153,21 +166,35 @@ body {
   margin-bottom: 12px;
 }
 .card h2 {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
   margin: 0 0 10px;
+  font-family: var(--mono);
   font-size: 13px;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
+.card h2 .cap {
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  text-align: right;
+}
 .card h3 {
   margin: 14px 0 8px;
-  font-size: 12px;
-  letter-spacing: 0.1em;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-soft);
 }
 .card.warn {
   border-left-color: var(--warn);
-  background: #fdf6e6;
+  background: #efe4cf;
 }
 
 .muted {
@@ -185,8 +212,9 @@ body {
 .field > span,
 .field > legend {
   display: block;
-  font-size: 12px;
-  letter-spacing: 0.08em;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-soft);
   margin-bottom: 4px;
@@ -199,7 +227,7 @@ textarea {
   padding: 10px 12px;
   font: inherit;
   color: var(--ink);
-  background: var(--field);
+  background: var(--field-2);
   border: 1px solid var(--ink-soft);
   border-radius: var(--radius);
 }
@@ -208,14 +236,19 @@ textarea {
   resize: vertical;
 }
 select.dupe {
-  border-color: var(--accent);
-  background: #fbe8e4;
+  border-color: var(--danger);
+  background: #eed7cf;
 }
-
 fieldset.field {
   border: none;
   padding: 0;
   margin: 0 0 12px;
+}
+input,
+select,
+textarea,
+button {
+  accent-color: var(--accent);
 }
 
 /* Segmented control ----------------------------------------------------- */
@@ -239,10 +272,11 @@ fieldset.field {
   align-items: center;
   justify-content: center;
   min-height: var(--tap);
+  font-family: var(--mono);
   font-weight: 700;
   text-transform: uppercase;
-  font-size: 13px;
-  letter-spacing: 0.08em;
+  font-size: 12px;
+  letter-spacing: 0.1em;
   cursor: pointer;
 }
 .seg input:checked + span {
@@ -261,10 +295,11 @@ fieldset.field {
 .tag {
   display: inline-block;
   margin-left: 8px;
+  font-family: var(--mono);
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  background: var(--ink);
+  background: var(--accent);
   color: var(--paper);
   padding: 2px 6px;
   border-radius: 2px;
@@ -278,7 +313,7 @@ fieldset.field {
 }
 .die-row {
   display: grid;
-  grid-template-columns: 1fr 96px;
+  grid-template-columns: 1fr 100px;
   gap: 10px;
   align-items: center;
 }
@@ -302,13 +337,13 @@ fieldset.field {
   text-align: left;
   font: inherit;
   color: var(--ink);
-  background: var(--field);
+  background: var(--field-2);
   border: 1px solid var(--line);
   border-left: 3px solid var(--line);
   border-radius: var(--radius);
   padding: 10px 12px;
   cursor: pointer;
-  opacity: 0.72;
+  opacity: 0.66;
 }
 .node.taken {
   opacity: 1;
@@ -323,8 +358,9 @@ fieldset.field {
   gap: 8px;
 }
 .node-idx {
+  font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--paper);
   background: var(--ink-soft);
@@ -339,6 +375,7 @@ fieldset.field {
 }
 .node-cost {
   margin-left: auto;
+  font-family: var(--mono);
   font-size: 11px;
   color: var(--ink-soft);
 }
@@ -348,12 +385,12 @@ fieldset.field {
   margin: 0;
 }
 .node-freq {
+  font-family: var(--mono);
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--accent-ink);
 }
-
 .signature,
 .node-col {
   margin-top: 6px;
@@ -367,7 +404,9 @@ fieldset.field {
   margin-bottom: 10px;
 }
 .chip {
-  font-size: 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
   background: var(--ink);
   color: var(--paper);
   padding: 4px 8px;
@@ -385,7 +424,7 @@ fieldset.field {
 
 /* Buttons --------------------------------------------------------------- */
 button {
-  font-family: inherit;
+  font-family: var(--sans);
 }
 .ghost {
   min-height: var(--tap);
@@ -394,100 +433,16 @@ button {
   color: var(--ink);
   border: 1.5px solid var(--ink);
   border-radius: var(--radius);
+  font-family: var(--mono);
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-/* Tracker --------------------------------------------------------------- */
-.row-between {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.stepper {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.round {
-  width: var(--tap);
-  height: var(--tap);
-  border-radius: 50%;
-  border: 1.5px solid var(--ink);
-  background: var(--field);
-  font-size: 22px;
-  line-height: 1;
-  cursor: pointer;
-}
-.counter-value {
-  min-width: 2ch;
-  text-align: center;
-  font-size: 26px;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-}
-
-.wyrd-track {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
-  margin-top: 4px;
-}
-.wyrd-cell {
-  aspect-ratio: 1;
-  min-height: var(--tap);
-  border: 1.5px solid var(--ink-soft);
-  border-radius: var(--radius);
-  background: var(--field);
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-}
-.wyrd-cell.threshold {
-  border-color: var(--ink);
-  border-width: 2px;
-}
-.wyrd-cell.on {
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--accent-ink);
-}
-.threshold-note {
-  margin: 10px 0 0;
-  font-size: 13px;
-}
-
-.counters {
-  display: flex;
-  gap: 12px;
-}
-.counter {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
-}
-.counter-label {
-  font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ink-soft);
-  text-align: center;
-}
-.counter-label small {
-  display: block;
-  color: var(--accent-ink);
-  letter-spacing: 0;
-  text-transform: none;
+  font-size: 12px;
+  cursor: pointer;
+  flex: none;
 }
 
 /* Resource cheat sheets ------------------------------------------------- */
-/* Mobile-first: one column; each counter stacks over its own cheat sheet.
-   Wider screens put Momentum and Exposure side by side. */
 .resource-cols {
   display: grid;
   grid-template-columns: 1fr;
@@ -508,6 +463,9 @@ button {
   flex: none;
 }
 
+.cheat {
+  font-family: var(--mono);
+}
 .cheat > summary {
   cursor: pointer;
   list-style: none;
@@ -516,8 +474,8 @@ button {
   align-items: center;
   gap: 8px;
   padding: 0 12px;
-  font-size: 12px;
-  letter-spacing: 0.06em;
+  font-size: 11px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-soft);
   background: var(--paper);
@@ -527,7 +485,6 @@ button {
 .cheat > summary::-webkit-details-marker {
   display: none;
 }
-/* Rotating caret so it's obviously expandable. */
 .cheat > summary::before {
   content: '';
   flex: none;
@@ -566,15 +523,15 @@ button {
 .cheat-meta {
   font-size: 12px;
   color: var(--ink-soft);
-  margin: 4px 0;
+  margin: 6px 0;
 }
 .cheat-line {
-  font-size: 13px;
+  font-size: 12px;
   margin: 6px 0;
 }
 .cheat-line.threshold-hit {
-  background: #fbe8e4;
-  border-left: 3px solid var(--accent);
+  background: #eed7cf;
+  border-left: 3px solid var(--danger);
   padding: 6px 8px;
   border-radius: 2px;
 }
@@ -589,7 +546,7 @@ button {
   display: flex;
   gap: 10px;
   align-items: baseline;
-  opacity: 0.45;
+  opacity: 0.4;
 }
 .spend.afford {
   opacity: 1;
@@ -616,15 +573,104 @@ button {
 }
 .spend-name {
   font-weight: 700;
-  font-size: 13px;
+  font-size: 12px;
 }
 .spend-name em {
   font-weight: 400;
   color: var(--ink-soft);
 }
 .spend-text {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--ink-soft);
+}
+
+/* Tracker counters ------------------------------------------------------ */
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.round {
+  width: var(--tap);
+  height: var(--tap);
+  border-radius: 50%;
+  border: 1.5px solid var(--ink);
+  background: var(--field-2);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.counter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+.counter-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: center;
+}
+.counter-label small {
+  display: block;
+  color: var(--accent-ink);
+  letter-spacing: 0;
+  text-transform: none;
+}
+.counter-value {
+  min-width: 2ch;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Wyrd track: a fixed purple → ochre → rust heat scale -------------------- */
+.wyrd-track {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-top: 4px;
+}
+.wyrd-cell {
+  aspect-ratio: 1;
+  min-height: var(--tap);
+  border: 2px solid var(--cell, var(--ink-soft));
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--cell, var(--ink-soft)) 14%, var(--field-2));
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.wyrd-cell:nth-child(-n + 2) {
+  --cell: var(--wyrd-low);
+}
+.wyrd-cell:nth-child(n + 3):nth-child(-n + 6) {
+  --cell: var(--wyrd-mid);
+}
+.wyrd-cell:nth-child(7) {
+  --cell: var(--wyrd-high);
+}
+.wyrd-cell.on {
+  background: var(--cell);
+  color: #fff;
+}
+.wyrd-cell[aria-pressed='true'] {
+  box-shadow: inset 0 0 0 3px var(--ink);
+}
+.threshold-note {
+  margin: 10px 0 0;
+  font-size: 13px;
 }
 
 /* Conditions ------------------------------------------------------------ */
@@ -640,7 +686,7 @@ button {
   padding: 10px 12px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: var(--field);
+  background: var(--field-2);
   cursor: pointer;
 }
 .cond.on {
@@ -656,13 +702,14 @@ button {
   opacity: 0.8;
 }
 .cond-stats {
-  font-size: 11px;
+  font-family: var(--mono);
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--accent-ink);
 }
 .cond.on .cond-stats {
-  color: #f2b7ab;
+  color: #e6b8d8;
 }
 
 .stat-grid {
@@ -674,30 +721,33 @@ button {
 .stat {
   border: 1px solid var(--line);
   border-radius: var(--radius);
+  background: var(--field-2);
   padding: 8px;
   text-align: center;
 }
 .stat-name {
   display: block;
-  font-size: 11px;
+  font-family: var(--mono);
+  font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   color: var(--ink-soft);
 }
 .stat-die {
   display: block;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 800;
 }
 .stat.penalised {
-  border-color: var(--accent);
-  background: #fbe8e4;
+  border: 2px solid var(--danger);
+  background: #eed7cf;
 }
 .stat-pen {
   display: block;
-  color: var(--accent-ink);
+  font-family: var(--mono);
+  color: var(--danger);
   font-weight: 700;
-  font-size: 13px;
+  font-size: 12px;
 }
 .stat-pen small {
   display: block;
@@ -718,8 +768,8 @@ button {
   cursor: pointer;
 }
 .use input {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   flex: none;
 }
 .use-body {
@@ -734,7 +784,8 @@ button {
   color: var(--ink-soft);
 }
 .use-source {
-  font-size: 11px;
+  font-family: var(--mono);
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--ink-soft);
@@ -754,11 +805,12 @@ button {
   padding: 12px;
   border: 1.5px solid var(--ink);
   border-radius: var(--radius);
-  background: var(--field);
+  background: var(--field-2);
+  font-family: var(--mono);
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
 }
 .reset small {
@@ -767,10 +819,11 @@ button {
   text-transform: none;
   font-size: 11px;
   color: var(--ink-soft);
+  font-family: var(--sans);
 }
 .reset.danger {
-  border-color: var(--accent);
-  color: var(--accent-ink);
+  border-color: var(--danger);
+  color: var(--danger);
 }
 
 .warnings {
@@ -778,7 +831,7 @@ button {
   padding-left: 18px;
 }
 .warn-text {
-  color: var(--accent-ink);
+  color: var(--danger);
   font-size: 13px;
 }
 

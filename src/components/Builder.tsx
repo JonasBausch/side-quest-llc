@@ -135,7 +135,9 @@ export function Builder({ def, onChange }: BuilderProps) {
 
       {/* Dice ----------------------------------------------------------- */}
       <section className="card">
-        <h2>Stat Dice</h2>
+        <h2>
+          Stat Dice <span className="cap">the die is the stat</span>
+        </h2>
         <p className="muted small">Assign each of d4–d20 to a stat.</p>
         <div className="dice-grid">
           {STAT_META.map((stat) => {
