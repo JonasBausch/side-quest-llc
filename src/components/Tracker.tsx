@@ -5,7 +5,12 @@ import type {
   SessionState,
   StatId,
 } from '../content/schema';
-import { conditions, wyrdTrack } from '../content';
+import {
+  conditions,
+  wyrdTrack,
+  momentumGuide,
+  exposureGuide,
+} from '../content';
 import { STAT_META, usableAbilities } from '../lib/character';
 import { newJob, newScene } from '../lib/storage';
 
@@ -117,23 +122,29 @@ export function Tracker({ def, session, onChange }: TrackerProps) {
       </section>
 
       {/* Momentum + Exposure ----------------------------------------- */}
-      <section className="card counters">
-        <Counter
-          label="Momentum"
-          value={session.momentum}
-          note={session.momentum >= MAX_MOMENTUM ? 'at cap (10)' : undefined}
-          onDec={() => patch({ momentum: Math.max(0, session.momentum - 1) })}
-          onInc={() =>
-            patch({ momentum: Math.min(MAX_MOMENTUM, session.momentum + 1) })
-          }
-        />
-        <Counter
-          label="Exposure"
-          value={session.exposure}
-          note={session.exposure >= 3 ? 'consequence at 3' : undefined}
-          onDec={() => patch({ exposure: Math.max(0, session.exposure - 1) })}
-          onInc={() => patch({ exposure: session.exposure + 1 })}
-        />
+      <section className="card">
+        <div className="counters">
+          <Counter
+            label="Momentum"
+            value={session.momentum}
+            note={session.momentum >= MAX_MOMENTUM ? 'at cap (10)' : undefined}
+            onDec={() => patch({ momentum: Math.max(0, session.momentum - 1) })}
+            onInc={() =>
+              patch({ momentum: Math.min(MAX_MOMENTUM, session.momentum + 1) })
+            }
+          />
+          <Counter
+            label="Exposure"
+            value={session.exposure}
+            note={session.exposure >= 3 ? 'consequence at 3' : undefined}
+            onDec={() => patch({ exposure: Math.max(0, session.exposure - 1) })}
+            onInc={() => patch({ exposure: session.exposure + 1 })}
+          />
+        </div>
+        <div className="cheats">
+          <MomentumCheat momentum={session.momentum} />
+          <ExposureCheat exposure={session.exposure} />
+        </div>
       </section>
 
       {/* Conditions + stat cross-reference --------------------------- */}
@@ -262,6 +273,58 @@ function Counter({
         </button>
       </div>
     </div>
+  );
+}
+
+/**
+ * Momentum spend cheat sheet. Full menu is always shown; the current Momentum
+ * lights up what you can afford and dims what you can't.
+ */
+function MomentumCheat({ momentum }: { momentum: number }) {
+  return (
+    <details className="cheat">
+      <summary>Momentum — spend & gain</summary>
+      <p className="cheat-meta">
+        {momentumGuide.gain} · cap {momentumGuide.cap}
+      </p>
+      <ul className="spends">
+        {momentumGuide.spends.map((s) => {
+          const afford = momentum >= s.cost;
+          return (
+            <li key={s.name} className={afford ? 'spend afford' : 'spend'}>
+              <span className="spend-cost">{s.cost}</span>
+              <span className="spend-body">
+                <span className="spend-name">
+                  {s.name}
+                  {s.note && <em> ({s.note})</em>}
+                </span>
+                <span className="spend-text">{s.text}</span>
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+      <p className="cheat-meta">{momentumGuide.handoff}</p>
+    </details>
+  );
+}
+
+/** Exposure cheat sheet. The consequence line lights up once you reach it. */
+function ExposureCheat({ exposure }: { exposure: number }) {
+  const hit = exposure >= exposureGuide.threshold.at;
+  return (
+    <details className="cheat">
+      <summary>Exposure — mark, clear, threshold</summary>
+      <p className="cheat-line">
+        <b>Mark (failure):</b> {exposureGuide.mark}
+      </p>
+      <p className="cheat-line">
+        <b>Clear (success):</b> {exposureGuide.clear}
+      </p>
+      <p className={hit ? 'cheat-line threshold-hit' : 'cheat-line'}>
+        <b>At {exposureGuide.threshold.at}:</b> {exposureGuide.threshold.text}
+      </p>
+    </details>
   );
 }
 

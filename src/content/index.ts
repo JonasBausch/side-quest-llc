@@ -29,6 +29,8 @@ import { strengths } from './strengths';
 import { flaws } from './flaws';
 import { conditions } from './conditions';
 import { wyrdTrack } from './wyrd';
+import { momentumGuide } from './momentum';
+import { exposureGuide } from './exposure';
 
 /** All trainings, alphabetical by display name. */
 export const trainings: Training[] = [
@@ -44,7 +46,17 @@ export const trainings: Training[] = [
   wardCarpenter,
 ].sort((a, b) => a.name.localeCompare(b.name));
 
-export { spellTags, tunes, tropes, strengths, flaws, conditions, wyrdTrack };
+export {
+  spellTags,
+  tunes,
+  tropes,
+  strengths,
+  flaws,
+  conditions,
+  wyrdTrack,
+  momentumGuide,
+  exposureGuide,
+};
 
 function byId<T extends { id: string }>(items: readonly T[]): Map<string, T> {
   return new Map(items.map((item) => [item.id, item]));

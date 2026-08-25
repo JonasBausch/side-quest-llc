@@ -238,6 +238,40 @@ export const wyrdTrackSchema = z.object({
 export type WyrdTrack = z.infer<typeof wyrdTrackSchema>;
 
 /* -------------------------------------------------------------------------- */
+/* Resource cheat sheets (reference prose shown under the tracker)            */
+/* -------------------------------------------------------------------------- */
+
+/** One way to spend Momentum. Rules: "Spend Momentum". */
+export const momentumSpendSchema = z.object({
+  name: z.string().min(1),
+  cost: z.number().int(),
+  text: z.string().min(1),
+  /** e.g. "1/job" — an extra limit beyond the cost. */
+  note: z.string().optional(),
+});
+export type MomentumSpend = z.infer<typeof momentumSpendSchema>;
+
+/** Momentum reference: how you gain it, the cap, spends, and Handoff. */
+export const momentumGuideSchema = z.object({
+  cap: z.number().int(),
+  gain: z.string().min(1),
+  handoff: z.string().min(1),
+  spends: z.array(momentumSpendSchema),
+});
+export type MomentumGuide = z.infer<typeof momentumGuideSchema>;
+
+/** Exposure reference: what marks it, what clears it, the consequence step. */
+export const exposureGuideSchema = z.object({
+  mark: z.string().min(1),
+  clear: z.string().min(1),
+  threshold: z.object({
+    at: z.number().int(),
+    text: z.string().min(1),
+  }),
+});
+export type ExposureGuide = z.infer<typeof exposureGuideSchema>;
+
+/* -------------------------------------------------------------------------- */
 /* Character definition (shareable: URL fragment / JSON, changes ~once a job)  */
 /* -------------------------------------------------------------------------- */
 
