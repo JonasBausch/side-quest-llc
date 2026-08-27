@@ -11,7 +11,7 @@ import {
   momentumGuide,
   exposureGuide,
 } from '../content';
-import { STAT_META, usableAbilities } from '../lib/character';
+import { STAT_META, usableAbilities, passiveAbilities } from '../lib/character';
 import { newJob, newScene } from '../lib/storage';
 
 const MAX_MOMENTUM = 10;
@@ -45,6 +45,7 @@ export function Tracker({ def, session, onChange, onDefChange }: TrackerProps) {
   }, [activeIds]);
 
   const abilities = useMemo(() => usableAbilities(def), [def]);
+  const passives = useMemo(() => passiveAbilities(def), [def]);
   const perScene = abilities.filter((a) => a.frequency === 'perScene');
   const perJob = abilities.filter((a) => a.frequency !== 'perScene');
   const spent = new Set(session.spentUses);
@@ -233,6 +234,26 @@ export function Tracker({ def, session, onChange, onDefChange }: TrackerProps) {
         )}
       </section>
 
+      {/* Passives + traits ------------------------------------------- */}
+      {passives.length > 0 && (
+        <section className="card">
+          <h2>
+            Kit <span className="cap">passives · traits · always on</span>
+          </h2>
+          <div className="kit">
+            {passives.map((a) => (
+              <div key={a.key} className="kit-item">
+                <div className="kit-head">
+                  <span className="kit-name">{a.name}</span>
+                  <span className="kit-source">{a.source}</span>
+                </div>
+                {a.text && <p className="kit-text">{a.text}</p>}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Notes -------------------------------------------------------- */}
       <section className="card">
         <h2>Notes</h2>
@@ -382,6 +403,7 @@ function UseGroup({
             <span className="use-body">
               <span className="use-name">{a.name}</span>
               <span className="use-source">{a.source}</span>
+              {a.text && <span className="use-text">{a.text}</span>}
             </span>
           </label>
         );

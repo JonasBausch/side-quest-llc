@@ -124,36 +124,38 @@ export interface UsableAbility {
 }
 
 /**
- * Everything the character owns that has a spendable cadence: the main
- * training's specialty, taken nodes, and the chosen trope/strength/flaw.
- * Passive abilities are omitted (nothing to spend).
+ * Every ability and trait the character owns, whatever its cadence: the main
+ * training's specialty, taken nodes, and the chosen trope/strength/flaw. Each
+ * carries the rules `text` so the tracker can show what it does. `frequency` is
+ * undefined when the source states no cadence (e.g. a passive gear note).
  */
-export function usableAbilities(def: CharacterDefinition): UsableAbility[] {
-  const out: UsableAbility[] = [];
-  const usable = (f?: Frequency): f is Frequency =>
-    !!f && USABLE_FREQUENCIES.includes(f);
+export function characterAbilities(
+  def: CharacterDefinition,
+): (Omit<UsableAbility, 'frequency'> & { frequency?: Frequency })[] {
+  const out: (Omit<UsableAbility, 'frequency'> & { frequency?: Frequency })[] =
+    [];
 
   const main = trainingsById.get(def.mainTrainingId);
-  if (main && usable(main.specialty.frequency)) {
+  if (main) {
     out.push({
       key: `specialty:${main.id}`,
       name: main.specialty.name,
       source: `${main.name} · Specialty`,
-      frequency: main.specialty.frequency!,
+      frequency: main.specialty.frequency,
       text: main.specialty.text,
     });
   }
 
   for (const ref of def.takenNodes) {
     const node = resolveNode(ref);
-    if (!node || !usable(node.frequency)) continue;
+    if (!node) continue;
     const training = trainingsById.get(ref.trainingId);
     const pathLabel = ref.path === 'wyrd' ? 'Wyrd' : 'Gear';
     out.push({
       key: `node:${nodeKey(ref)}`,
       name: node.name,
       source: `${training?.name ?? ref.trainingId} · ${pathLabel}-${ref.index}`,
-      frequency: node.frequency!,
+      frequency: node.frequency,
       text: node.text,
     });
   }
@@ -164,16 +166,40 @@ export function usableAbilities(def: CharacterDefinition): UsableAbility[] {
     ['Flaw', def.flaw],
   ];
   for (const [label, pick] of traitEntries) {
-    if (pick && usable(pick.frequency)) {
+    if (pick) {
       out.push({
         key: `${label.toLowerCase()}:${pick.id ?? 'custom'}`,
         name: pick.name,
         source: label,
-        frequency: pick.frequency!,
+        frequency: pick.frequency,
         text: pick.text ?? '',
       });
     }
   }
 
   return out;
+}
+
+const isUsable = (f?: Frequency): f is Frequency =>
+  !!f && USABLE_FREQUENCIES.includes(f);
+
+/**
+ * Everything the character owns that has a spendable cadence: surfaced as
+ * checkboxes in the tracker's Uses section. Passives are omitted (nothing to
+ * spend).
+ */
+export function usableAbilities(def: CharacterDefinition): UsableAbility[] {
+  return characterAbilities(def).filter(
+    (a): a is UsableAbility => isUsable(a.frequency),
+  );
+}
+
+/**
+ * Everything the character owns that is *not* spendable — passives and abilities
+ * that state no cadence. Shown as a reference loadout, no checkboxes.
+ */
+export function passiveAbilities(
+  def: CharacterDefinition,
+): (Omit<UsableAbility, 'frequency'> & { frequency?: Frequency })[] {
+  return characterAbilities(def).filter((a) => !isUsable(a.frequency));
 }

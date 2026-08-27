@@ -761,7 +761,7 @@ button {
 }
 .use {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   padding: 10px 4px;
   border-bottom: 1px solid var(--line);
@@ -789,6 +789,48 @@ button {
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--ink-soft);
+}
+.use-text {
+  margin-top: 3px;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--ink);
+}
+.use.spent .use-text {
+  color: var(--ink-soft);
+}
+
+/* Kit — passives & traits (reference, no checkbox) ---------------------- */
+.kit {
+  display: flex;
+  flex-direction: column;
+}
+.kit-item {
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--line);
+}
+.kit-item:last-child {
+  border-bottom: none;
+}
+.kit-head {
+  display: flex;
+  flex-direction: column;
+}
+.kit-name {
+  font-weight: 700;
+}
+.kit-source {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+.kit-text {
+  margin: 3px 0 0;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--ink);
 }
 
 /* Resets ---------------------------------------------------------------- */
