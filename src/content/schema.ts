@@ -344,6 +344,12 @@ export const characterDefinitionSchema = z.object({
 
   /** Background-question answers, freeform Q→A. Rules: "Quick Backstory". */
   background: z.record(z.string(), z.string()).optional(),
+
+  /**
+   * Freeform player notes — backstory prose, table reminders, whatever. Part of
+   * the definition (travels in the share link and JSON), not session state.
+   */
+  notes: z.string().optional(),
 });
 export type CharacterDefinition = z.infer<typeof characterDefinitionSchema>;
 

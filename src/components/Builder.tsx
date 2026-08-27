@@ -263,6 +263,20 @@ export function Builder({ def, onChange }: BuilderProps) {
         />
       </section>
 
+      {/* Notes ---------------------------------------------------------- */}
+      <section className="card">
+        <h2>Notes</h2>
+        <label className="field">
+          <span>Backstory, reminders, anything</span>
+          <textarea
+            rows={6}
+            value={def.notes ?? ''}
+            placeholder="Freeform notes — background story, table reminders, loose ends…"
+            onChange={(e) => update({ notes: e.target.value })}
+          />
+        </label>
+      </section>
+
       <ImportExport def={def} onChange={onChange} />
     </div>
   );
