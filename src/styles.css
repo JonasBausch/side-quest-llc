@@ -30,6 +30,9 @@
 
   --radius: 3px;
   --tap: 44px;
+  /* Fixed topbar height so the sticky tabs can anchor exactly to its base
+     (44px Share button + 12px×2 padding + 3px border). */
+  --topbar-h: 71px;
 
   --bg: var(--paper);
   color-scheme: light;
@@ -79,6 +82,55 @@ body {
   }
 }
 
+/* Wyrd whimsy: absurd things drift up as scene pressure climbs. Peripheral
+   and non-interactive — it sits behind the content and never intercepts touch. */
+.wyrd-whimsy {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+/* Keep the actual UI above the drifters. The topbar and tabs already sit in
+   their own sticky stacking contexts; only the static children need raising. */
+.app > .banner,
+.app > .screen {
+  position: relative;
+  z-index: 1;
+}
+.whimsy {
+  position: absolute;
+  top: 108%;
+  line-height: 1;
+  opacity: 0;
+  filter: saturate(0.7);
+  will-change: transform, opacity;
+  animation-name: whimsy-drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes whimsy-drift {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--peak, 0.16);
+  }
+  88% {
+    opacity: var(--peak, 0.16);
+  }
+  100% {
+    transform: translate3d(var(--sway, 0px), -130vh, 0) rotate(var(--spin, 24deg));
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wyrd-whimsy {
+    display: none;
+  }
+}
+
 /* Header ---------------------------------------------------------------- */
 .topbar {
   display: flex;
@@ -86,6 +138,7 @@ body {
   justify-content: space-between;
   gap: 12px;
   padding: 12px 16px;
+  height: var(--topbar-h);
   border-bottom: 3px solid var(--ink);
   background: var(--bg);
   position: sticky;
@@ -127,7 +180,7 @@ body {
   display: flex;
   border-bottom: 3px solid var(--ink);
   position: sticky;
-  top: 56px;
+  top: var(--topbar-h);
   background: var(--bg);
   z-index: 9;
 }

@@ -9,6 +9,7 @@ import { readHash, writeHash, shareUrl } from './lib/serialize';
 import { emptySession, loadSession, saveSession } from './lib/storage';
 import { Builder } from './components/Builder';
 import { Tracker } from './components/Tracker';
+import { WyrdWhimsy } from './components/WyrdWhimsy';
 
 type Screen = 'build' | 'track';
 
@@ -54,6 +55,7 @@ export function App() {
 
   return (
     <div className={`app wyrd-${tier}`}>
+      <WyrdWhimsy tier={tier} />
       <header className="topbar">
         <div className="brand">
           <span className="brand-mark">SideQuest LLC / Field Record</span>
