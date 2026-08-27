@@ -20,9 +20,11 @@ interface TrackerProps {
   def: CharacterDefinition;
   session: SessionState;
   onChange: (session: SessionState) => void;
+  /** Edits the character definition. Notes are definition data, not session. */
+  onDefChange: (def: CharacterDefinition) => void;
 }
 
-export function Tracker({ def, session, onChange }: TrackerProps) {
+export function Tracker({ def, session, onChange, onDefChange }: TrackerProps) {
   const patch = (p: Partial<SessionState>) => onChange({ ...session, ...p });
 
   const activeIds = useMemo(
@@ -229,6 +231,20 @@ export function Tracker({ def, session, onChange }: TrackerProps) {
             onToggle={toggleUse}
           />
         )}
+      </section>
+
+      {/* Notes -------------------------------------------------------- */}
+      <section className="card">
+        <h2>Notes</h2>
+        <label className="field">
+          <span>Backstory, reminders, anything</span>
+          <textarea
+            rows={5}
+            value={def.notes ?? ''}
+            placeholder="Freeform notes — background story, table reminders, loose ends…"
+            onChange={(e) => onDefChange({ ...def, notes: e.target.value })}
+          />
+        </label>
       </section>
 
       {/* Resets ------------------------------------------------------- */}

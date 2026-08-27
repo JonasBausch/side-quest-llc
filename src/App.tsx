@@ -95,7 +95,12 @@ export function App() {
         {screen === 'build' ? (
           <Builder def={def} onChange={setDef} />
         ) : (
-          <Tracker def={def} session={session} onChange={setSession} />
+          <Tracker
+            def={def}
+            session={session}
+            onChange={setSession}
+            onDefChange={setDef}
+          />
         )}
       </main>
     </div>
