@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type {
   CharacterDefinition,
   ConditionId,
+  DieSize,
   SessionState,
   StatId,
 } from '../content/schema';
@@ -43,6 +44,66 @@ export function Tracker({ def, session, onChange, onDefChange }: TrackerProps) {
     }
     return map;
   }, [activeIds]);
+
+  // Ephemeral dice roll. Not definition, not session state — a physical-die
+  // substitute that lives only in component state and is never persisted.
+  const [roll, setRoll] = useState<{
+    statId: StatId;
+    die: DieSize;
+    raw: number; // settled face value
+    penalty: number; // −N from active conditions at roll time (display only)
+    rolling: boolean;
+    display: number; // number currently shown; cycles during the animation
+  } | null>(null);
+  const rollTimer = useRef<number | null>(null);
+
+  const reduceMotion = useMemo(
+    () =>
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false,
+    [],
+  );
+
+  useEffect(
+    () => () => {
+      if (rollTimer.current !== null) window.clearInterval(rollTimer.current);
+    },
+    [],
+  );
+
+  function rollStat(statId: StatId, die: DieSize) {
+    const faces = Number(die.slice(1));
+    if (!faces) return;
+    const penalty = (penalties.get(statId) ?? []).length;
+    const final = 1 + Math.floor(Math.random() * faces);
+    const rand = () => 1 + Math.floor(Math.random() * faces);
+
+    if (rollTimer.current !== null) {
+      window.clearInterval(rollTimer.current);
+      rollTimer.current = null;
+    }
+
+    if (reduceMotion) {
+      setRoll({ statId, die, raw: final, penalty, rolling: false, display: final });
+      return;
+    }
+
+    setRoll({ statId, die, raw: final, penalty, rolling: true, display: rand() });
+    const start = performance.now();
+    const DURATION = 550;
+    rollTimer.current = window.setInterval(() => {
+      if (performance.now() - start >= DURATION) {
+        if (rollTimer.current !== null) window.clearInterval(rollTimer.current);
+        rollTimer.current = null;
+        setRoll((r) =>
+          r && r.statId === statId ? { ...r, rolling: false, display: final } : r,
+        );
+      } else {
+        setRoll((r) =>
+          r && r.statId === statId ? { ...r, display: rand() } : r,
+        );
+      }
+    }, 55);
+  }
 
   const abilities = useMemo(() => usableAbilities(def), [def]);
   const passives = useMemo(() => passiveAbilities(def), [def]);
@@ -185,22 +246,64 @@ export function Tracker({ def, session, onChange, onDefChange }: TrackerProps) {
           })}
         </div>
 
+        <p className="stat-hint cap">Tap a stat to roll its die</p>
+
+        {roll && (
+          <p className="roll-readout" aria-live="polite">
+            <strong>{STAT_META.find((s) => s.id === roll.statId)?.name}</strong>
+            <span className="cap"> {roll.die}</span>
+            {' → '}
+            <span className="roll-raw">
+              {roll.rolling ? roll.display : roll.raw}
+            </span>
+            {!roll.rolling && roll.penalty > 0 && (
+              <span className="roll-adj">
+                {' '}− {roll.penalty} = {roll.raw - roll.penalty}
+              </span>
+            )}
+          </p>
+        )}
+
         <div className="stat-grid">
           {STAT_META.map((stat) => {
             const hits = penalties.get(stat.id) ?? [];
+            const die = def.statDice[stat.id];
+            const isRolled = roll?.statId === stat.id;
             return (
-              <div
+              <button
                 key={stat.id}
-                className={hits.length ? 'stat penalised' : 'stat'}
+                type="button"
+                className={[
+                  'stat',
+                  hits.length ? 'penalised' : '',
+                  isRolled ? 'rolled' : '',
+                  isRolled && roll.rolling ? 'rolling' : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+                onClick={() => die && rollStat(stat.id, die)}
+                disabled={!die}
+                aria-label={
+                  die
+                    ? `Roll ${stat.name} ${die}`
+                    : `${stat.name}: no die assigned`
+                }
               >
                 <span className="stat-name">{stat.name}</span>
-                <span className="stat-die">{def.statDice[stat.id] ?? '—'}</span>
+                {isRolled ? (
+                  <>
+                    <span className="stat-roll">{roll.display}</span>
+                    <span className="stat-die-cap">{die}</span>
+                  </>
+                ) : (
+                  <span className="stat-die">{die ?? '—'}</span>
+                )}
                 {hits.length > 0 && (
                   <span className="stat-pen">
                     −{hits.length} <small>{hits.join(', ')}</small>
                   </span>
                 )}
-              </div>
+              </button>
             );
           })}
         </div>
