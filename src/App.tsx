@@ -40,6 +40,12 @@ export function App() {
     saveSession(session);
   }, [session]);
 
+  // Reflect the character name in the browser tab title.
+  useEffect(() => {
+    const name = def.name.trim() || 'Unnamed Agent';
+    document.title = `SideQuest LLC — ${name} Character Sheet`;
+  }, [def.name]);
+
   const versionMismatch = def.rulesVersion !== CURRENT_RULES_VERSION;
   const tier = useMemo(() => wyrdTier(session.wyrd), [session.wyrd]);
 
