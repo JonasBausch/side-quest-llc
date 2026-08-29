@@ -1,6 +1,37 @@
 # CLAUDE.md
 
-Project instructions for Claude Code. Read this before making changes.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+Read this whole file before making changes. The **Non-negotiables** below are
+the constraints most likely to trip you up; the **Commands** section gets you
+running.
+
+## Commands
+
+```
+npm install        # once
+npm run dev        # Vite dev server with HMR (default http://localhost:5173)
+npm run build      # tsc -b && vite build — the typecheck AND the build in one
+npm run preview    # serve the production build from dist/
+```
+
+- **`npm run build` is the only automated gate.** There is no lint step and no
+  test runner configured — `tsc -b` inside `build` is what catches breakage, so
+  run it before you commit. To typecheck alone: `npx tsc --noEmit`.
+- **The "structural tests" referred to under Working conventions are a manual
+  review discipline** (diff each training against the PDF), not an automated
+  suite. Content correctness at runtime is enforced by the Zod schemas in
+  `src/content/schema.ts`, validated as content is imported.
+- **Deploy is automatic.** Pushing to `main` triggers `.github/workflows/deploy.yml`,
+  which builds and publishes `dist/` to GitHub Pages. There is nothing to run by hand.
+
+## Where to start
+
+- Game content to add or fix → `src/content/` (schema in `schema.ts`, one file
+  per training under `trainings/`). See **Content model** and **Working conventions**.
+- Builder/tracker behavior or styling → `src/components/` + `src/styles.css`.
+- Serialization, storage, validation → `src/lib/`. See the two data lifecycles
+  under **Architecture** — keep them separate.
 
 ## What this is
 
@@ -139,6 +170,15 @@ Include a print stylesheet, someone will want paper.
 
 Respect `prefers-reduced-motion`, keep keyboard focus visible, and make sure
 the whole builder is usable without a pointer.
+
+Scene-state feedback keys off the Wyrd tier computed in `App.tsx` (`wyrd-calm`
+→ `distortion` → `hazard` → `surge` at 0/2/4/6). That tier drives both the
+background shift and `WyrdWhimsy`, a decorative layer of absurd drifters that
+gets denser as Wyrd climbs. Its list lives in `src/content/whimsy.ts` — note
+this is **decorative data, deliberately outside the Zod rules registry** in
+`content/index.ts`. Not all `src/content/` is rules content; don't give whimsy
+a rules schema or wire it into character/session state. Anything motion-based
+here must be disabled under `prefers-reduced-motion` (CSS handles the whimsy).
 
 ## Before you start
 
