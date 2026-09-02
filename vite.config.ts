@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
 // Project page at https://jonasbausch.github.io/side-quest-llc/ — the base path
@@ -6,4 +6,10 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   base: '/side-quest-llc/',
   plugins: [react()],
+  // Suite is pure logic (content validation, serialize, session resets), so the
+  // default node environment is enough — no jsdom/happy-dom needed.
+  test: {
+    environment: 'node',
+    include: ['src/**/*.test.ts'],
+  },
 });
