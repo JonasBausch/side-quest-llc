@@ -24,5 +24,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
+      - run: npm test
       # `npm run build` is `tsc -b && vite build` — the typecheck AND the build.
       - run: npm run build
