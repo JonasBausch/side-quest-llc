@@ -39,7 +39,7 @@ A character builder and live session tracker for **SideQuest**, a homebrew
 tabletop RPG. It is used by a small cast during recorded actual-play sessions,
 often on phones, sometimes with bad wifi.
 
-The rules live in `docs/rules-v4.0.md`. That file is the GM's document, copied
+The rules live in `docs/rules-v5.0.md`. That file is the GM's document, copied
 verbatim. It is the source of truth for all game content. Do not edit it. When
 the GM ships a new version, it lands as a new file and the diff drives the
 content update.
@@ -85,7 +85,7 @@ definition, and loading a share link must not clobber someone's live state.
 ## Layout
 
 ```
-docs/rules-v4.0.md      GM's ruleset, verbatim, read-only
+docs/rules-v5.0.md      GM's ruleset, verbatim, read-only
 src/content/schema.ts   Zod schemas and inferred types
 src/content/trainings/  One file per training
 src/content/*.ts        Spell tags, tropes, strengths, flaws, conditions, wyrd
