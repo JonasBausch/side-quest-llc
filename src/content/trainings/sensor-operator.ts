@@ -2,7 +2,7 @@ import type { Training } from '../schema';
 
 /**
  * Sensor Operator — "We have it on Polaroid."
- * Transcribed verbatim from docs/rules-v4.0.md ("Sensor Operator").
+ * Transcribed verbatim from docs/rules-v5.0.md ("Sensor Operator").
  *
  * Cost/order conflict, flagged: unlike every other training, the "—" (no-cost)
  * gear is NOT Gear-1 here. The leveling table orders Gear-1 EM/Sigil Sweep (1),

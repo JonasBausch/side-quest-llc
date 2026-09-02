@@ -2,7 +2,7 @@ import type { Training } from '../schema';
 
 /**
  * Crowd Liason — "Please stop filming."
- * Transcribed verbatim from docs/rules-v4.0.md ("Crowd Liason").
+ * Transcribed verbatim from docs/rules-v5.0.md ("Crowd Liason").
  *
  * Spelling conflict, flagged: the Training Options list and this section header
  * both spell it "Crowd Liason"; the glossary spells it "Crowd Liaison". The

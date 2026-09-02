@@ -2,7 +2,7 @@ import type { SpellTag } from './schema';
 
 /**
  * Shared spell tags, referenced by id from trainings' `availableTagIds`.
- * Transcribed from docs/rules-v4.0.md ("Spell Tags" per training + the Quick
+ * Transcribed from docs/rules-v5.0.md ("Spell Tags" per training + the Quick
  * Index). Tags are shared across trainings and never duplicated inline; kept
  * alphabetical by id. This is the full set of 12 from the Quick Index.
  *

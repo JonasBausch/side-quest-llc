@@ -1,7 +1,7 @@
 import type { Trait } from './schema';
 
 /**
- * Flaws. Transcribed from docs/rules-v4.0.md ("Flaws"). Homebrew is allowed at
+ * Flaws. Transcribed from docs/rules-v5.0.md ("Flaws"). Homebrew is allowed at
  * the character level. `frequency` follows each entry's "once per scene/job"
  * wording so the tracker can offer a mark for the once-a-scene/job triggers;
  * ongoing/passive penalties carry no cadence.

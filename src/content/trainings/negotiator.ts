@@ -2,7 +2,7 @@ import type { Training } from '../schema';
 
 /**
  * Negotiator — "Talk it down. Pay the toll."
- * Transcribed verbatim from docs/rules-v4.0.md ("Negotiator").
+ * Transcribed verbatim from docs/rules-v5.0.md ("Negotiator").
  *
  * Structurally the unusual one, and it exercises the schema's edges:
  * - only two available tags (BANISH, GLAMOUR) — the non-empty minimum;

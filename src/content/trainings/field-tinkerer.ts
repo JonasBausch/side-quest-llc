@@ -2,7 +2,7 @@ import type { Training } from '../schema';
 
 /**
  * Field Tinkerer — "Hold on, I can fix that."
- * Transcribed verbatim from docs/rules-v4.0.md ("Field Tinkerer").
+ * Transcribed verbatim from docs/rules-v5.0.md ("Field Tinkerer").
  *
  * Wyrd nodes carry the shared boilerplate: Wyrd-1/3/5 are die upgrades and
  * Wyrd-2 is the signature choice (the Tune is stored on the character, not

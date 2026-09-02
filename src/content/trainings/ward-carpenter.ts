@@ -2,7 +2,7 @@ import type { Training } from '../schema';
 
 /**
  * Ward Carpenter — "Home imp-rovement."
- * Transcribed verbatim from docs/rules-v4.0.md ("Ward Carpenter").
+ * Transcribed verbatim from docs/rules-v5.0.md ("Ward Carpenter").
  * Wyrd-4 is Rule-Locking, inline.
  */
 export const wardCarpenter = {

@@ -2,7 +2,7 @@ import type { Training } from '../schema';
 
 /**
  * Research Archivist — "Hold music, then forbidden PDFs."
- * Transcribed verbatim from docs/rules-v4.0.md ("Research Archivist").
+ * Transcribed verbatim from docs/rules-v5.0.md ("Research Archivist").
  *
  * Only one available tag (SENSE) — the non-empty minimum. Wyrd-4 is Echo
  * Recording, inline (this section includes the "Cost: Echos are sticky" line).

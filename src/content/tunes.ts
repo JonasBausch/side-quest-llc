@@ -1,7 +1,7 @@
 import type { Tune } from './schema';
 
 /**
- * The six Signature Tunes. Transcribed from docs/rules-v4.0.md ("Signature
+ * The six Signature Tunes. Transcribed from docs/rules-v5.0.md ("Signature
  * Spells", Tier 1). A character picks one at Wyrd-2 and applies it to their
  * signature spell tag.
  */

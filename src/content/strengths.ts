@@ -1,7 +1,7 @@
 import type { Trait } from './schema';
 
 /**
- * Strengths. Transcribed from docs/rules-v4.0.md ("Strengths"). Homebrew is
+ * Strengths. Transcribed from docs/rules-v5.0.md ("Strengths"). Homebrew is
  * allowed at the character level. `frequency` follows each entry's own
  * "1/scene" or "1/job" wording; passive/situational ones carry no cadence.
  */
