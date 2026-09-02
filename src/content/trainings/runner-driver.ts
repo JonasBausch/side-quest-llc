@@ -2,7 +2,7 @@ import type { Training } from '../schema';
 
 /**
  * Runner/Driver — "Fast & the Phantasmal."
- * Transcribed verbatim from docs/rules-v4.0.md ("Runner/Driver").
+ * Transcribed verbatim from docs/rules-v5.0.md ("Runner/Driver").
  * Wyrd-4 is Residue Economy, inline.
  */
 export const runnerDriver = {

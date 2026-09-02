@@ -1,7 +1,7 @@
 import type { MomentumGuide } from './schema';
 
 /**
- * Momentum reference. Transcribed from docs/rules-v4.0.md ("Momentum" +
+ * Momentum reference. Transcribed from docs/rules-v5.0.md ("Momentum" +
  * "Handoff"). Reference prose only — the tracker counts Momentum but never
  * resolves a spend.
  */

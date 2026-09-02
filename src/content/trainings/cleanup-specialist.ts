@@ -2,7 +2,7 @@ import type { Training } from '../schema';
 
 /**
  * Cleanup Specialist — "Professional vibes janitor."
- * Transcribed verbatim from docs/rules-v4.0.md ("Cleanup Specialist").
+ * Transcribed verbatim from docs/rules-v5.0.md ("Cleanup Specialist").
  *
  * Naming conflict, flagged: the leveling-track table calls Gear-2 "Trace Kit",
  * but the Mundane Path Options describe it under the heading "Forensics Kit".

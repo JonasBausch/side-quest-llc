@@ -2,7 +2,7 @@ import type { Training } from '../schema';
 
 /**
  * Artifact Handler — "White gloves. Bad decisions."
- * Transcribed verbatim from docs/rules-v4.0.md ("Artifact Handler").
+ * Transcribed verbatim from docs/rules-v5.0.md ("Artifact Handler").
  *
  * Gear-1 (Museum Gloves) is described by the unlabelled line under "Mundane
  * Path Gear Options" ("First contact with a ridden object doesn't auto-trigger

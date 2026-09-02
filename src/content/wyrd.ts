@@ -2,7 +2,7 @@ import type { WyrdTrack } from './schema';
 
 /**
  * The Wyrd track (0 → 6) with its named thresholds. Transcribed from
- * docs/rules-v4.0.md ("Wyrd threshold"). The tracker uses the thresholds for
+ * docs/rules-v5.0.md ("Wyrd threshold"). The tracker uses the thresholds for
  * peripheral scene-state feedback (the page background shifts at 4 and 6).
  */
 export const wyrdTrack = {

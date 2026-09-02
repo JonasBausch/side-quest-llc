@@ -2,7 +2,7 @@ import type { Training } from '../schema';
 
 /**
  * Containment Tech — "Bustin' makes me feel employed."
- * Transcribed verbatim from docs/rules-v4.0.md ("Containment Tech").
+ * Transcribed verbatim from docs/rules-v5.0.md ("Containment Tech").
  * Wyrd-4 is Rule-Locking, inline.
  */
 export const containmentTech = {

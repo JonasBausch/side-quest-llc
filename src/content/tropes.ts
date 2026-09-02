@@ -1,7 +1,7 @@
 import type { Trait } from './schema';
 
 /**
- * Tropes. Transcribed from docs/rules-v4.0.md ("Tropes"). These are suggestions
+ * Tropes. Transcribed from docs/rules-v5.0.md ("Tropes"). These are suggestions
  * — the rules explicitly allow homebrew, handled at the character level. The
  * `frequency` tag is derived from each trope's own "once per scene/job" wording;
  * where none is stated it is left passive.
