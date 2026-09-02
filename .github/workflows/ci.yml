@@ -1,0 +1,27 @@
+name: CI
+
+# Quality gate for pull requests: run the typecheck + build before merge.
+on:
+  pull_request:
+    branches: [main]
+  # Also run on direct pushes to main as a backstop.
+  push:
+    branches: [main]
+
+# A newer commit on the same PR cancels the older, still-running check.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      # `npm run build` is `tsc -b && vite build` — the typecheck AND the build.
+      - run: npm run build
