@@ -64,6 +64,7 @@ export const tropes = [
     id: 'occult-freelancer',
     name: 'Occult Freelancer',
     text: `You start each job with one extra contact "on retainer" (one call/text for a useful fact, tool, or introduction).`,
+    frequency: 'perJob',
   },
   {
     id: 'reluctant-hero',
