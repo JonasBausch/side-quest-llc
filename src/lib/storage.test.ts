@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { newScene, newJob, emptySession } from './storage';
-import { emptyDefinition, usableAbilities } from './character';
+import { emptyDefinition, usableAbilities, toggleGroupBonus } from './character';
 import type { CharacterDefinition, SessionState } from '../content/schema';
 
 /**
@@ -84,5 +84,48 @@ describe('newJob', () => {
     expect(next.characterId).toBe(state.characterId);
     expect(next.exposure).toBe(0);
     expect(next).not.toBe(state);
+  });
+});
+
+describe('group bonuses across resets', () => {
+  /**
+   * The whole point of storing unlocks in the definition: a crew upgrade is
+   * bought once and kept, while its once-per-job use is spent and refreshed.
+   */
+  it('survives New job, while its per-job use is cleared', () => {
+    const def = toggleGroupBonus(
+      { ...emptyDefinition(), mainTrainingId: 'field-tinkerer' },
+      'team-protocol-1',
+    );
+    const key = usableAbilities(def).find((a) =>
+      a.key === 'group:team-protocol-1',
+    )!.key;
+
+    const spent: SessionState = {
+      ...emptySession(def.id),
+      spentUses: [key],
+    };
+
+    expect(newJob(spent).spentUses).toEqual([]);
+    expect(def.groupBonuses).toEqual(['team-protocol-1']);
+  });
+
+  it('a per-job crew use is not cleared by New scene', () => {
+    const def = toggleGroupBonus(
+      { ...emptyDefinition(), mainTrainingId: 'field-tinkerer' },
+      'team-protocol-1',
+    );
+    const spent: SessionState = {
+      ...emptySession(def.id),
+      spentUses: ['group:team-protocol-1'],
+    };
+    expect(newScene(def, spent).spentUses).toEqual(['group:team-protocol-1']);
+  });
+
+  it('a passive level takes no use slot', () => {
+    const def = toggleGroupBonus(emptyDefinition(), 'legacy-or-contact');
+    expect(
+      usableAbilities(def).some((a) => a.key === 'group:legacy-or-contact'),
+    ).toBe(false);
   });
 });

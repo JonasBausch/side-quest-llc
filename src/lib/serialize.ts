@@ -7,6 +7,8 @@
  *   Every share link minted before the compact format uses it. Decoding it is
  *   kept forever — old links must not break.
  * - **v2** (current, `2~` prefix): a compact projection of the same definition.
+ *   New optional keys may be added to v2 without a version bump: a decoder
+ *   ignores keys it does not know, and an older link simply lacks them.
  *   Short keys, node refs indexed against a link-local training list, dice as a
  *   positional string, and book-picked traits stored as bare ids and rehydrated
  *   from the content registry on read. A full build drops from ~1130 URL chars
@@ -84,6 +86,8 @@ interface WireV2 {
   k: string;
   g?: string;
   u?: string;
+  /** Unlocked Group Bonus ids, comma-joined. Absent when none are unlocked. */
+  c?: string;
   /** Dice in WIRE_STATS order, `d` prefix stripped, e.g. `"10,6,8,,12,4"`. */
   d?: string;
   r?: [WireTrait, WireTrait, WireTrait];
@@ -202,6 +206,7 @@ function toWire(def: CharacterDefinition): WireV2 {
     k: packNodes(def),
     ...(def.signatureTagId ? { g: def.signatureTagId } : {}),
     ...(def.signatureTune ? { u: def.signatureTune } : {}),
+    ...(def.groupBonuses?.length ? { c: def.groupBonuses.join(',') } : {}),
     ...(packDice(def.statDice) ? { d: packDice(def.statDice) } : {}),
     ...(traits.some((t) => t !== 0) ? { r: traits } : {}),
     ...(def.background ? { b: def.background } : {}),
@@ -225,6 +230,7 @@ function fromWire(wire: WireV2): unknown {
     takenNodes,
     ...(wire.g ? { signatureTagId: wire.g } : {}),
     ...(wire.u ? { signatureTune: wire.u } : {}),
+    ...(wire.c ? { groupBonuses: wire.c.split(',').filter(Boolean) } : {}),
     statDice: unpackDice(wire.d),
     ...Object.fromEntries(
       WIRE_TRAITS.map((slot, i) => [

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { trainings, spellTagsById } from './index';
-import { trainingSchema } from './schema';
+import { trainings, spellTagsById, groupBonuses } from './index';
+import { trainingSchema, groupBonusGuideSchema } from './schema';
+import { groupBonusGuide } from './group-bonuses';
 
 /**
  * The "structural tests" CLAUDE.md relies on to catch silent transcription
@@ -29,4 +30,37 @@ describe('trainings', () => {
       }
     },
   );
+});
+
+describe('group bonuses', () => {
+  it('is structurally valid', () => {
+    expect(() => groupBonusGuideSchema.parse(groupBonusGuide)).not.toThrow();
+  });
+
+  it('has unique ids', () => {
+    const ids = groupBonuses.map((b) => b.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('levels within a family are contiguous from 1', () => {
+    const families = new Map<string, number[]>();
+    for (const b of groupBonuses) {
+      families.set(b.group, [...(families.get(b.group) ?? []), b.level]);
+    }
+    for (const [group, levels] of families) {
+      expect(
+        [...levels].sort((a, b) => a - b),
+        `${group} levels`,
+      ).toEqual(levels.map((_, i) => i + 1));
+    }
+  });
+
+  it('prices every level of a family identically', () => {
+    const priced = new Map<string, number>();
+    for (const b of groupBonuses) {
+      const seen = priced.get(b.group);
+      if (seen === undefined) priced.set(b.group, b.costPerPlayer);
+      else expect(b.costPerPlayer, `${b.group} price`).toBe(seen);
+    }
+  });
 });

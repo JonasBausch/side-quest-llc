@@ -960,6 +960,118 @@ button {
   color: var(--ink);
 }
 
+/* Crew — group bonuses -------------------------------------------------- */
+.crew-owned {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.crew-owned li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--line);
+}
+.crew-owned li:last-child {
+  border-bottom: none;
+}
+.crew-owned-name {
+  font-weight: 700;
+}
+.crew-owned-source {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+.crew-family {
+  margin: 12px 0;
+}
+.crew-family h3 {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 4px;
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent-ink);
+}
+.crew-price {
+  margin-left: auto;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+}
+/* Locked levels stay legible but clearly inert — you can see what the crew
+   could save toward, the way untaken nodes are shown in the builder. */
+.crew-level {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  opacity: 0.55;
+}
+.crew-level:last-child {
+  border-bottom: none;
+}
+.crew-level.afford,
+.crew-level.owned {
+  opacity: 1;
+}
+.crew-level.owned {
+  background: var(--field-2);
+}
+.crew-level input {
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+.crew-body {
+  display: flex;
+  flex-direction: column;
+}
+.crew-name {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-weight: 700;
+}
+.crew-level-no {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+.crew-freq {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-ink);
+}
+.crew-text {
+  margin-top: 3px;
+  font-size: 12px;
+  line-height: 1.35;
+}
+.crew-note {
+  margin-top: 4px;
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--warn);
+}
+
 /* Resets ---------------------------------------------------------------- */
 .resets {
   display: flex;
