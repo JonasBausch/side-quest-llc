@@ -39,10 +39,17 @@ A character builder and live session tracker for **SideQuest**, a homebrew
 tabletop RPG. It is used by a small cast during recorded actual-play sessions,
 often on phones, sometimes with bad wifi.
 
-The rules live in `docs/rules-v5.0.md`. That file is the GM's document, copied
-verbatim. It is the source of truth for all game content. Do not edit it. When
-the GM ships a new version, it lands as a new file and the diff drives the
-content update.
+The rules live in `docs/rules-v5.0.md`. It is the source of truth for all game
+content, and it is edited in place — there is no new-file-per-version dance and
+no strict versioning semantics. Rules changes flow both ways: the GM ships
+updates that land here and drive the content update, and we may also correct
+the rules ourselves (typos, stale references, half-applied edits), which then
+get sent back to the GM to apply on their end.
+
+Keep the two kinds of edit distinct. Transcribing the GM's changes into
+`src/content/` is routine. Changing the rules *themselves* is a game-design
+decision — make those only when asked, or when something is unambiguously
+broken (a node the rules no longer define, a reference to a removed concept).
 
 ## Non-negotiables
 
@@ -110,7 +117,6 @@ current ruleset, show a banner. Do not migrate silently.
 The draft has real holes. Do not paper over them in code, surface them in the
 UI as GM-call notes:
 
-- Scale slots are referenced as a spendable resource but never defined.
 - The casting roll formula is ambiguous, stat die plus Wyrd die or Wyrd die
   alone.
 - Starting nodes are unclear. Creation implies a Keystone, the glossary says
