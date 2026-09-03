@@ -8,6 +8,11 @@ import type { Training } from '../schema';
  * Wyrd-2 is the signature choice (the Tune is stored on the character, not
  * here). Wyrd-4 is this training's Interface ability, kept as inline prose.
  * Mundane gear costs are the parenthetical tier from the rules ("—" = absent).
+ *
+ * Gear-2 "Um, Actually" carries the TN ladder (Standard 9 … Impossible 21+) in
+ * its node text, because the rules print the ladder inside that node's block.
+ * It reads like a global difficulty reference, so if it turns up elsewhere it
+ * belongs in shared content rather than on this one node.
  */
 export const fieldTinkerer = {
   id: 'field-tinkerer',
@@ -51,9 +56,9 @@ export const fieldTinkerer = {
       frequency: 'perScene',
     },
     {
-      name: `Spare Couplers`,
-      text: `Once/scene when a Scale slot is spent, spend a smaller slot instead (M→S, L→M). Cost: choose Wyrd +1 or Exposure +1 (your fix leaves a mark or draws eyes).`,
-      frequency: 'perScene',
+      name: `Um, Actually`,
+      text: `Once per job, when a TN is announced, you can decide "It's actually not that hard," and explain a much simpler way to achieve the same goal. By doing so, you reduce the difficulty level of that roll by one. Standard: 9. Hard: 12. Severe: 15. Extreme: 18. Impossible: 21+.`,
+      frequency: 'perJob',
       cost: 1,
     },
     {
