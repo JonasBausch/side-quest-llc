@@ -31,12 +31,23 @@ export const DICE: DieSize[] = ['d4', 'd6', 'd8', 'd10', 'd12', 'd20'];
 /** Frequencies that surface as a spendable use in the tracker. */
 export const USABLE_FREQUENCIES: Frequency[] = ['perScene', 'perJob', 'counter'];
 
+/**
+ * A short, stable id for a new character. Only the localStorage session key is
+ * derived from it, so 32 bits is ample — and it costs ~28 fewer URL characters
+ * than a full UUID. Existing characters keep the id they were created with:
+ * ids are read from the share link, never regenerated, so nobody loses their
+ * live session state.
+ */
+function newCharacterId(): string {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+    return crypto.randomUUID().replace(/-/g, '').slice(0, 8);
+  }
+  return Date.now().toString(36);
+}
+
 export function emptyDefinition(): CharacterDefinition {
   return {
-    id:
-      typeof crypto !== 'undefined' && 'randomUUID' in crypto
-        ? crypto.randomUUID()
-        : `char-${Date.now()}`,
+    id: newCharacterId(),
     rulesVersion: CURRENT_RULES_VERSION,
     name: '',
     mainTrainingId: trainings[0].id,
