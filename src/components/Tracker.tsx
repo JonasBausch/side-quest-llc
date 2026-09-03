@@ -402,13 +402,17 @@ export function Tracker({ def, session, onChange, onDefChange }: TrackerProps) {
         <button
           className="reset danger"
           onClick={() => {
-            if (window.confirm('New job clears everything, including Exposure. Continue?')) {
+            if (
+              window.confirm(
+                'New job clears Exposure, Wyrd, conditions and all uses. Momentum carries. Continue?',
+              )
+            ) {
               onChange(newJob(session));
             }
           }}
         >
           New job
-          <small>clears everything</small>
+          <small>clears all but Momentum</small>
         </button>
       </section>
     </div>

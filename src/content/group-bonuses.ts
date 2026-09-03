@@ -112,7 +112,7 @@ export const groupBonusGuide = {
       costPerPlayer: 5,
       frequency: 'passive',
       text: `Gain a crew-wide contact, major favor, or legacy asset (NPC, informant, safehouse, "retired" ghost, etc.). A permanent resource or relationship in the setting, mechanically accessible via flashbacks or downtime.`,
-      note: `5 per player against a Momentum cap of 10; whether Momentum carries between jobs is unwritten.`,
+      note: `5 per player against a Momentum cap of 10 — the crew banks toward this across jobs.`,
     },
   ],
 } satisfies GroupBonusGuide;

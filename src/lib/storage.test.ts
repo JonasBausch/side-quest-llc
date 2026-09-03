@@ -5,7 +5,8 @@ import type { CharacterDefinition, SessionState } from '../content/schema';
 
 /**
  * Reset semantics from CLAUDE.md: "New scene" clears per-scene uses and zeroes
- * Wyrd; "New job" clears everything including Exposure. And the two data
+ * Wyrd; "New job" clears everything including Exposure, except Momentum,
+ * which carries between jobs by GM ruling. And the two data
  * lifecycles stay disjoint — a reset must never touch the definition.
  *
  * Keys are derived from usableAbilities() rather than hard-coded so the test
@@ -80,10 +81,26 @@ describe('newJob', () => {
 
     const next = newJob(state);
 
-    expect(next).toEqual(emptySession(state.characterId));
+    expect(next).toEqual({
+      ...emptySession(state.characterId),
+      momentum: state.momentum,
+    });
     expect(next.characterId).toBe(state.characterId);
     expect(next.exposure).toBe(0);
     expect(next).not.toBe(state);
+  });
+
+  /**
+   * GM ruling: Momentum carries between jobs. It is the only counter that
+   * does, and the expensive Group Bonuses are unreachable without it —
+   * Legacy or Contact costs 5 per player against a cap of 10.
+   */
+  it('carries Momentum across the job boundary', () => {
+    const { def, perSceneKey, perJobKey } = fixture();
+    const state = seededSession(def.id, perSceneKey, perJobKey);
+
+    expect(state.momentum).toBeGreaterThan(0);
+    expect(newJob(state).momentum).toBe(state.momentum);
   });
 });
 

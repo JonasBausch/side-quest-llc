@@ -63,7 +63,14 @@ export function newScene(
   };
 }
 
-/** "New job": clear everything including Exposure. */
+/**
+ * "New job": clear the scene and the job — Wyrd, Exposure, conditions, and
+ * every spent use.
+ *
+ * Momentum is the one exception: it carries between jobs (GM ruling, v5.0
+ * leaves it unwritten). Zeroing it would make the expensive Group Bonuses
+ * unbuyable, since Legacy or Contact costs 5 per player against a cap of 10.
+ */
 export function newJob(state: SessionState): SessionState {
-  return emptySession(state.characterId);
+  return { ...emptySession(state.characterId), momentum: state.momentum };
 }

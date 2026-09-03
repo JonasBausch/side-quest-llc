@@ -422,7 +422,7 @@ export type ActiveCondition = z.infer<typeof activeConditionSchema>;
  * The live, per-session half of a character. Changes constantly. Strictly
  * disjoint from CharacterDefinition — they share only `characterId`. "New
  * scene" clears per-scene spent uses and zeroes Wyrd; "New job" clears
- * everything including Exposure.
+ * everything including Exposure, except Momentum, which carries between jobs.
  */
 export const sessionStateSchema = z.object({
   /** Links to CharacterDefinition.id. The only field the two halves share. */
