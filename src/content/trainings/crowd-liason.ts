@@ -1,17 +1,23 @@
 import type { Training } from '../schema';
 
 /**
- * Crowd Liason — "Please stop filming."
+ * Crowd Liaison — "Please stop filming."
  * Transcribed verbatim from docs/rules-v5.0.md ("Crowd Liason").
  *
- * Spelling conflict, flagged: the Training Options list and this section header
- * both spell it "Crowd Liason"; the glossary spells it "Crowd Liaison". The
- * training text wins over the glossary, so the name/id follow "Liason".
+ * Spelling: the Training Options list and this section header spell it "Crowd
+ * Liason", the glossary spells it "Crowd Liaison". GM confirmed the tables are
+ * a typo, so the display name is "Liaison".
+ *
+ * The id stays `crowd-liason`. It is a storage key, not a spelling: it is
+ * serialized into share links and stored characters, and nothing resolves an
+ * id that no longer exists — a renamed id silently drops the main training and
+ * every node taken in it. Do not "fix" it without an alias.
+ *
  * Wyrd-4 is Thin-Place Etiquette, inline (states its own once-per-scene).
  */
 export const crowdLiason = {
   id: 'crowd-liason',
-  name: 'Crowd Liason',
+  name: 'Crowd Liaison',
   tagline: `Please stop filming.`,
   specialty: {
     name: `Men in Beige`,
