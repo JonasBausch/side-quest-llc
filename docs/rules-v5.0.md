@@ -591,7 +591,7 @@ Once/job: reveal you already built the exact adapter/tool. It works perfectly.
 | Wyrd Path                                         | Mundane Path                    |
 | ------------------------------------------------- | ------------------------------- |
 | **Wyrd-1:** D4 Wyrd Die (Small Spells)            | **Gear-1:** Jury-Rig Bag        |
-| **Wyrd-2:** Pick a signature spell tag            | **Gear-2:** Spare Couplers      |
+| **Wyrd-2:** Pick a signature spell tag            | **Gear-2:** Um, Actually        |
 | **Wyrd-3:** D8 Wyrd Die (Small and Medium Spells) | **Gear-3:** Remote Trigger      |
 | **Wyrd-4:** Rule-Locking                          | **Gear-4:** Overclock           |
 | **Wyrd-5:** D12 Wyrd Die (All Spell Sizes)        | **Gear-5:** Safe Discharge      |
@@ -607,9 +607,18 @@ Once/scene, make a broken thing work for one beat.
 On a failure, it works but you pick the blowback: **Wyrd +1** or **Exposure +1**.
 
 ---
-**Spare Couplers (1)**
-Once/scene when a Scale slot is spent, spend a smaller slot instead (M→S, L→M).
-Cost: choose **Wyrd +1** or **Exposure +1** (your fix leaves a mark or draws eyes).
+**Um, Actually (1)**
+Once per job, when a TN is announced, you can decide “It's actually not that hard,” and explain a much simpler way to achieve the same goal. By doing so, you reduce the difficulty level of that roll by one.
+
+Standard: 9
+
+Hard: 12
+
+Severe: 15
+
+Extreme: 18
+
+Impossible: 21+
 
 ---
 **Remote Trigger (1)**
@@ -1676,7 +1685,7 @@ Force, lifting, breaking, carrying.
 Research Archivist module that gives a factual lead about an object/location’s history.
 
 **Casting**
-Using a spell tag by spending a Scale slot (S/M/L) and rolling a casting stat + Magic Die.
+Using a spell tag and rolling a casting stat + Magic Die.
 
 **Casting Stat**
 The stat you choose for a casting roll (whatever fits the action: Brains, Grit, etc.).
@@ -2015,9 +2024,6 @@ Containment module creating a Containment Zone; first failed roll inside doesn�
 **Saltline (Spell Tag)**
 A spell tag that creates a boundary extraplanar creatures can’t cross. See **SALTLINE** under Spell Tags.
 
-**Scale Slot (S/M/L)**
-A resource spend determining spell magnitude. You pick a slot, spend it, then roll to cast.
-
 **Scene**
 A contained sequence of play under a single situation/location/time pressure.
 
@@ -2087,7 +2093,7 @@ A higher-quality success that advances the clock by +2 (as written).
 A once-per-job group maneuver unlocked by spending group Momentum.
 
 **Thermal Polaroids**
-Sensor module: ask one SENSE question without spending a slot; answer arrives as an image artifact.
+Sensor module: ask one SENSE question with gear; answer arrives as an image artifact.
 
 **Thin Place**
 A location where reality is weak, overlaps, or “rules” are easier to break.
