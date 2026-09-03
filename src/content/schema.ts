@@ -17,7 +17,7 @@ import { z } from 'zod';
  * The current ruleset version. A stored character carries its own
  * `rulesVersion`; when it does not match this, the UI shows a banner.
  */
-export const CURRENT_RULES_VERSION = '4.0';
+export const CURRENT_RULES_VERSION = '5.0';
 
 /* -------------------------------------------------------------------------- */
 /* Shared primitives                                                          */
