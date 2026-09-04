@@ -995,8 +995,8 @@ Once/job, freeze a moment and ask **three SENSE reads** about the same subject.
 #### Leveling Paths
 | Wyrd Path                                         | Mundane Path                     |
 | ------------------------------------------------- | -------------------------------- |
-| **Wyrd-1:** D4 Wyrd Die (Small Spells)            | **Gear-1:** EM/Sigil Sweep       |
-| **Wyrd-2:** Pick a signature spell tag            | **Gear-2:** Thermal Polaroids       |
+| **Wyrd-1:** D4 Wyrd Die (Small Spells)            | **Gear-1:** Thermal Polaroids       |
+| **Wyrd-2:** Pick a signature spell tag            | **Gear-2:** EM/Sigil Sweep          |
 | **Wyrd-3:** D8 Wyrd Die (Small and Medium Spells) | **Gear-3:** Ring-Light Projector |
 | **Wyrd-4:** Echo Recording                        | **Gear-4:** Pattern Library      |
 | **Wyrd-5:** D12 Wyrd Die (All Spell Sizes)        | **Gear-5:** Signal Stitcher      |
