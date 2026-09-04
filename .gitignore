@@ -21,3 +21,7 @@ dist/
 
 # TypeScript build info
 *.tsbuildinfo
+
+# Working sheet of open rules questions, shared with the GM outside the repo.
+# Local only — see CLAUDE.md.
+docs/gm-questions.md
