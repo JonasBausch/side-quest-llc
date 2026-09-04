@@ -11,6 +11,7 @@ import {
   wyrdTrack,
   momentumGuide,
   exposureGuide,
+  castingGuide,
   groupBonusGuide,
   groupBonuses,
 } from '../content';
@@ -260,6 +261,8 @@ export function Tracker({ def, session, onChange, onDefChange }: TrackerProps) {
 
         <p className="stat-hint cap">Tap a stat to roll its die</p>
 
+        <CastingCheat wyrd={session.wyrd} />
+
         {roll && (
           <p className="roll-readout" aria-live="polite">
             <strong>{STAT_META.find((s) => s.id === roll.statId)?.name}</strong>
@@ -498,6 +501,48 @@ function ExposureCheat({ exposure }: { exposure: number }) {
       </p>
       <p className={hit ? 'cheat-line threshold-hit' : 'cheat-line'}>
         <b>At {exposureGuide.threshold.at}:</b> {exposureGuide.threshold.text}
+      </p>
+    </details>
+  );
+}
+
+/**
+ * Casting cheat sheet. At Wyrd 4+ the escalation rule applies on its own, so
+ * the bumped TNs appear next to the printed ones and the escalation line
+ * highlights. The rule itself is always spelled out, because it also fires on a
+ * resisting target or an unstable area — a GM call the tracker can't see.
+ */
+function CastingCheat({ wyrd }: { wyrd: number }) {
+  const escalated = wyrd >= castingGuide.escalationAt;
+  return (
+    <details className="cheat">
+      <summary>Casting — what you roll</summary>
+      <p className="cheat-line">
+        <b>Roll:</b> {castingGuide.roll}
+      </p>
+      <p className="cheat-line">
+        <b>Casting stat:</b> {castingGuide.stat}
+      </p>
+      <ul className="scales">
+        {castingGuide.scales.map((scale) => (
+          <li key={scale.name} className="scale">
+            <span className="scale-name">{scale.name}</span>
+            <span className="scale-tn">
+              TN {scale.tn}
+              {escalated && <b> → {scale.escalatedTn}</b>}
+            </span>
+            <span className="scale-note">
+              {scale.difficulty}
+              {escalated && ' · escalated'}
+            </span>
+          </li>
+        ))}
+      </ul>
+      <p className={escalated ? 'cheat-line threshold-hit' : 'cheat-line'}>
+        <b>Escalation:</b> {castingGuide.escalation}
+      </p>
+      <p className="cheat-line">
+        <b>Stress:</b> {castingGuide.stress}
       </p>
     </details>
   );

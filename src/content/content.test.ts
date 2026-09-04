@@ -1,7 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { trainings, spellTagsById, groupBonuses } from './index';
-import { trainingSchema, groupBonusGuideSchema } from './schema';
+import {
+  trainingSchema,
+  groupBonusGuideSchema,
+  castingGuideSchema,
+} from './schema';
 import { groupBonusGuide } from './group-bonuses';
+import { castingGuide } from './casting';
 
 /**
  * The "structural tests" CLAUDE.md relies on to catch silent transcription
@@ -62,5 +67,19 @@ describe('group bonuses', () => {
       if (seen === undefined) priced.set(b.group, b.costPerPlayer);
       else expect(b.costPerPlayer, `${b.group} price`).toBe(seen);
     }
+  });
+});
+
+describe('casting guide', () => {
+  it('is structurally valid', () => {
+    expect(() => castingGuideSchema.parse(castingGuide)).not.toThrow();
+  });
+
+  it('covers all three scales', () => {
+    expect(castingGuide.scales.map((s) => s.name)).toEqual([
+      'Small',
+      'Medium',
+      'Large',
+    ]);
   });
 });
