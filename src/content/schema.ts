@@ -271,7 +271,9 @@ export const exposureGuideSchema = z.object({
 });
 export type ExposureGuide = z.infer<typeof exposureGuideSchema>;
 
-/** One scale of spell with its target number. Rules: "Casting with Scale". */
+/**
+ * One scale of spell with its target number. Rules: "Casting with Scale".
+ */
 export const castingScaleSchema = z.object({
   name: z.string().min(1),
   /** The printed TN, and the difficulty word next to it. */
