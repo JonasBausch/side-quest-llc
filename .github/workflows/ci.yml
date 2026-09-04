@@ -16,13 +16,16 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: npm
-      - run: npm ci
+      # --no-audit skips npm's registry audit call, which is not a build gate
+      # and has stalled installs for minutes when that service is degraded.
+      - run: npm ci --no-audit --fund=false
       - run: npm run lint
       - run: npm test
       # `npm run build` is `tsc -b && vite build` — the typecheck AND the build.
