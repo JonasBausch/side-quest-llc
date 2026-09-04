@@ -32,6 +32,7 @@ import { conditions } from './conditions';
 import { wyrdTrack } from './wyrd';
 import { momentumGuide } from './momentum';
 import { exposureGuide } from './exposure';
+import { castingGuide } from './casting';
 import { groupBonusGuide } from './group-bonuses';
 
 /** All trainings, alphabetical by display name. */
@@ -58,6 +59,7 @@ export {
   wyrdTrack,
   momentumGuide,
   exposureGuide,
+  castingGuide,
   groupBonusGuide,
 };
 

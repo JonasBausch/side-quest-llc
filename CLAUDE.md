@@ -51,6 +51,11 @@ Keep the two kinds of edit distinct. Transcribing the GM's changes into
 decision — make those only when asked, or when something is unambiguously
 broken (a node the rules no longer define, a reference to a removed concept).
 
+Open questions for the GM live in `docs/gm-questions.md`. It is **local only,
+gitignored, and must never be committed** — it is a working sheet shared with
+the GM outside this repo. Edit it in place as answers come in (each question is
+also mirrored as a GitHub issue), but keep it out of every commit and PR.
+
 ## Non-negotiables
 
 **Do not model game mechanics.** Store rules text as prose. The only structured
@@ -92,7 +97,8 @@ definition, and loading a share link must not clobber someone's live state.
 ## Layout
 
 ```
-docs/rules-v5.0.md      GM's ruleset, verbatim, read-only
+docs/rules-v5.0.md      GM's ruleset, verbatim — edited in place, see above
+docs/gm-questions.md    Open questions for the GM — local only, never commit
 src/content/schema.ts   Zod schemas and inferred types
 src/content/trainings/  One file per training
 src/content/*.ts        Spell tags, tropes, strengths, flaws, conditions, wyrd

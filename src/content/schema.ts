@@ -271,6 +271,35 @@ export const exposureGuideSchema = z.object({
 });
 export type ExposureGuide = z.infer<typeof exposureGuideSchema>;
 
+/**
+ * One scale of spell with its target number. Rules: "Casting with Scale".
+ */
+export const castingScaleSchema = z.object({
+  name: z.string().min(1),
+  /** The printed TN, and the difficulty word next to it. */
+  tn: z.number().int(),
+  difficulty: z.string().min(1),
+  /** The TN once the escalation rule bumps it a step. Printed, not computed. */
+  escalatedTn: z.string().min(1),
+});
+export type CastingScale = z.infer<typeof castingScaleSchema>;
+
+/**
+ * Casting reference: what you roll, the TN per scale, and the two rules that
+ * push Wyrd. Prose only — nothing here resolves a cast.
+ */
+export const castingGuideSchema = z.object({
+  roll: z.string().min(1),
+  /** How the casting stat is picked. */
+  stat: z.string().min(1),
+  scales: z.array(castingScaleSchema),
+  escalation: z.string().min(1),
+  /** Wyrd value at which escalation applies on its own; lights up the line. */
+  escalationAt: z.number().int(),
+  stress: z.string().min(1),
+});
+export type CastingGuide = z.infer<typeof castingGuideSchema>;
+
 /* -------------------------------------------------------------------------- */
 /* Group Bonuses (crew upgrades bought with per-player Momentum)               */
 /* -------------------------------------------------------------------------- */
