@@ -25,7 +25,8 @@ import {
 } from '../lib/character';
 import { newJob, newScene } from '../lib/storage';
 
-const MAX_MOMENTUM = 10;
+// The cap is content, not a component constant — it comes from the rules.
+const MAX_MOMENTUM = momentumGuide.cap;
 
 interface TrackerProps {
   def: CharacterDefinition;
@@ -207,7 +208,11 @@ export function Tracker({ def, session, onChange, onDefChange }: TrackerProps) {
             <Counter
               label="Momentum"
               value={session.momentum}
-              note={session.momentum >= MAX_MOMENTUM ? 'at cap (10)' : undefined}
+              note={
+                session.momentum >= MAX_MOMENTUM
+                  ? `at cap (${MAX_MOMENTUM})`
+                  : undefined
+              }
               onDec={() =>
                 patch({ momentum: Math.max(0, session.momentum - 1) })
               }
@@ -502,6 +507,7 @@ function ExposureCheat({ exposure }: { exposure: number }) {
       <p className={hit ? 'cheat-line threshold-hit' : 'cheat-line'}>
         <b>At {exposureGuide.threshold.at}:</b> {exposureGuide.threshold.text}
       </p>
+      <p className="cheat-meta">{exposureGuide.tally}</p>
     </details>
   );
 }
