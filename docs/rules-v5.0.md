@@ -1558,6 +1558,8 @@ Conditions apply −1 ongoing to relevant rolls until cleared.
 * **Marked** (the phenomenon “knows you”)- **Flight/Charm**
 * **Strained** (magic overload)- **Grit/Brains**
 
+**Conditions stack.** Two Conditions that hit the same stat apply **−2** to it: a character who is both **Shaken** and **Winded** rolls **Fight** at −2.
+
 Clear conditions with rest, support, ritual care, medical help, safehouse downtime, or a successful stabilizing scene.
 \page
 
