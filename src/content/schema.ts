@@ -268,6 +268,8 @@ export const exposureGuideSchema = z.object({
     at: z.number().int(),
     text: z.string().min(1),
   }),
+  /** Whether the count resets at the threshold or keeps going. */
+  tally: z.string().min(1),
 });
 export type ExposureGuide = z.infer<typeof exposureGuideSchema>;
 

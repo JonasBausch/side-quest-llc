@@ -1493,6 +1493,8 @@ This ensures escalation even when the team is competent, and it makes failure me
 
 **At 3 failures:** the scene continues, but a consequence hits (authorities arrive, footage spreads, site gets restricted, new complication clock).
 
+**Exposure does not reset.** It is an open-ended tally: the consequence at 3 fires, and the number keeps climbing from there. Clearing Exposure is the only thing that brings it down.
+
 #### Wyrd 6 Reality Surge
 
 When Wyrd hits 6:
