@@ -1,12 +1,15 @@
 import { describe, it, expect } from 'vitest';
 import {
+  availableTagIds,
   emptyDefinition,
   hasNode,
   nodeKey,
   setStart,
   startingNodeRef,
+  tagSourceTrainingIds,
 } from './character';
 import { validateDefinition } from './validate';
+import { trainingsById } from '../content';
 import type { CharacterDefinition, NodeRef } from '../content/schema';
 
 /**
@@ -97,5 +100,50 @@ describe('the free starting node', () => {
     expect(validateDefinition(def)).toContainEqual(
       expect.stringContaining('Gear-1'),
     );
+  });
+});
+
+/**
+ * A cross-trained character picks their Signature from either training's tags
+ * (Rules: "Getting a Promotion"). The Specialty is the only thing locked to the
+ * main training, so tags are a union, never a filter.
+ */
+describe('signature tag access', () => {
+  const main = 'field-tinkerer';
+  const other = 'sensor-operator';
+
+  function withNode(path: 'wyrd' | 'mundane') {
+    return {
+      ...emptyDefinition(),
+      mainTrainingId: main,
+      startingPath: 'mundane' as const,
+      takenNodes: [{ trainingId: other, path, index: 1 }],
+    };
+  }
+
+  it('offers the main training on its own', () => {
+    const def = { ...emptyDefinition(), mainTrainingId: main };
+    expect(tagSourceTrainingIds(def)).toEqual([main]);
+  });
+
+  it('adds the training of a cross-trained Wyrd node', () => {
+    expect(tagSourceTrainingIds(withNode('wyrd')).sort()).toEqual(
+      [main, other].sort(),
+    );
+  });
+
+  it('does not add a training entered on the Gear side alone', () => {
+    expect(tagSourceTrainingIds(withNode('mundane'))).toEqual([main]);
+  });
+
+  it('unions both tag lists rather than filtering to the main training', () => {
+    const def = withNode('wyrd');
+    const tags = availableTagIds(def);
+
+    for (const id of [main, other]) {
+      for (const tag of trainingsById.get(id)!.availableTagIds) {
+        expect(tags).toContain(tag);
+      }
+    }
   });
 });
