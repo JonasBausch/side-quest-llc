@@ -97,7 +97,7 @@ definition, and loading a share link must not clobber someone's live state.
 ## Layout
 
 ```
-docs/rules-v5.0.md      GM's ruleset, verbatim, read-only
+docs/rules-v5.0.md      GM's ruleset, verbatim — edited in place, see above
 docs/gm-questions.md    Open questions for the GM — local only, never commit
 src/content/schema.ts   Zod schemas and inferred types
 src/content/trainings/  One file per training
