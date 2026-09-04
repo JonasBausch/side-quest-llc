@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { trainings, spellTagsById, groupBonuses } from './index';
+import { trainings, spellTagsById, groupBonuses, strengthsById } from './index';
 import {
   trainingSchema,
   groupBonusGuideSchema,
@@ -99,5 +99,14 @@ describe('resource guides', () => {
     expect(momentumGuide.cap).toBe(10);
     expect(exposureGuide.threshold.at).toBe(3);
     expect(exposureGuide.tally).toMatch(/does not reset/i);
+  });
+});
+
+describe('trait cadences', () => {
+  // GM ruling: Unshakable Calm gets a tick-box even though it fires on its own.
+  // Book traits ride in a share link as an id and are rebuilt from content, so
+  // this cadence reaches characters built before the ruling.
+  it('makes Unshakable Calm a per-scene use', () => {
+    expect(strengthsById.get('unshakable-calm')?.frequency).toBe('perScene');
   });
 });
