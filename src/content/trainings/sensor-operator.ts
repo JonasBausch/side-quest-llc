@@ -4,10 +4,11 @@ import type { Training } from '../schema';
  * Sensor Operator — "We have it on Polaroid."
  * Transcribed verbatim from docs/rules-v5.0.md ("Sensor Operator").
  *
- * Cost/order conflict, flagged: unlike every other training, the "—" (no-cost)
- * gear is NOT Gear-1 here. The leveling table orders Gear-1 EM/Sigil Sweep (1),
- * Gear-2 Thermal Polaroids (—), … so node order follows the table while each
- * item keeps its own printed cost tier.
+ * v5.0's leveling table put the costed EM/Sigil Sweep at Gear-1 and the free
+ * Thermal Polaroids at Gear-2, the only training where the "—" gear was not
+ * first. The GM confirms that was a slip: the two are swapped, which also makes
+ * the table agree with the Mundane Path Options prose, where Thermal Polaroids
+ * was always printed first.
  *
  * Also: this section's Echo Recording (Wyrd-4) omits the "Cost: Echos are
  * sticky" line that Artifact Handler and Research Archivist include. Transcribed
@@ -50,15 +51,15 @@ export const sensorOperator = {
   ],
   mundaneNodes: [
     {
+      name: `Thermal Polaroids`,
+      text: `Once/scene, ask one SENSE question with gear. Answer arrives as an image artifact.`,
+      frequency: 'perScene',
+    },
+    {
       name: `EM/Sigil Sweep`,
       text: `On entering a scene, name what you're scanning for (ridden object / thin place / trigger / anchor). Learn where it is OR what it is not (GM answers concretely). Limit: 1/scene.`,
       frequency: 'perScene',
       cost: 1,
-    },
-    {
-      name: `Thermal Polaroids`,
-      text: `Once/scene, ask one SENSE question with gear. Answer arrives as an image artifact.`,
-      frequency: 'perScene',
     },
     {
       name: `Ring-Light Projector`,

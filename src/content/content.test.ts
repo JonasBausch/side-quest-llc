@@ -31,6 +31,13 @@ describe('trainings', () => {
     },
   );
 
+  // The pattern that caught Sensor Operator's swapped Gear-1/Gear-2: the free
+  // item opens the Mundane Path in every training. A costed Gear-1 means two
+  // entries have been transcribed in the wrong order.
+  it.each(trainings)('$name opens its Mundane Path with the free gear', (training) => {
+    expect(training.mundaneNodes[0].cost ?? 0).toBe(0);
+  });
+
   it.each(trainings)(
     '$name references only spell tags that resolve',
     (training) => {
