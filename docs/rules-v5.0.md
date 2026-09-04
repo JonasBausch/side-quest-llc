@@ -225,7 +225,7 @@ Set **Exposure to 0 for that zone** and your report holds.
 | Wyrd Path                                         | Mundane Path                        |
 | ------------------------------------------------- | ----------------------------------- |
 | **Wyrd-1:** D4 Wyrd Die (Small Spells)            | **Gear-1:** Glamour Wash            |
-| **Wyrd-2:** Pick a signature spell tag            | **Gear-2:** Trace Kit               |
+| **Wyrd-2:** Pick a signature spell tag            | **Gear-2:** Forensics Kit           |
 | **Wyrd-3:** D8 Wyrd Die (Small and Medium Spells) | **Gear-3:** Neutralizer             |
 | **Wyrd-4:** Residue Economy                       | **Gear-4:** Certification Stamp     |
 | **Wyrd-5:** D12 Wyrd Die (All Spell Sizes)        | **Gear-5:** Hazmat Seal             |

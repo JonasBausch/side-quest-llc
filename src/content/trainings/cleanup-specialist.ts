@@ -4,12 +4,11 @@ import type { Training } from '../schema';
  * Cleanup Specialist — "Professional vibes janitor."
  * Transcribed verbatim from docs/rules-v5.0.md ("Cleanup Specialist").
  *
- * Naming conflict, flagged: the leveling-track table calls Gear-2 "Trace Kit",
- * but the Mundane Path Options describe it under the heading "Forensics Kit".
- * The table is the canonical node list (tables win), so the node name follows
- * the table and the text is the Forensics Kit prose. Wyrd-4 is Residue Economy,
- * inline. Neutralizer's rules text is truncated in the source ("choose one:"
- * with a single option) and is transcribed as printed.
+ * Gear-2 went by two names in v5.0 — "Trace Kit" in the leveling table and
+ * "Forensics Kit" over the prose. The GM has settled it as one item called the
+ * Forensics Kit, and the table has been corrected to match. Wyrd-4 is Residue
+ * Economy, inline. Neutralizer's rules text is truncated in the source ("choose
+ * one:" with a single option) and is transcribed as printed.
  */
 export const cleanupSpecialist = {
   id: 'cleanup-specialist',
@@ -53,7 +52,7 @@ export const cleanupSpecialist = {
       frequency: 'perScene',
     },
     {
-      name: `Trace Kit`,
+      name: `Forensics Kit`,
       text: `Collect a sample that becomes a leverage asset (intel, contact, crafting input, ward ingredient). If you use it later to support a cover story, it can justify clearing Exposure (GM call).`,
       cost: 1,
     },
