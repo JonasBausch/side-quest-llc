@@ -1567,7 +1567,7 @@ Clear conditions with rest, support, ritual care, medical help, safehouse downti
 
 1. **Pick spell tag** (Wardmark, Glamour, etc.)
 2. **Pick scale** (S/M/L).
-3. **Roll**: Casting Stat **Magic Die** (+Skill if relevant)
+3. **Roll**: Casting Stat die **+ Magic Die** (+Skill if relevant)
 4. **TN by scale**:
 
 * **Small:** TN **9** (Standard)
@@ -1690,7 +1690,7 @@ Research Archivist module that gives a factual lead about an object/location’s
 Using a spell tag and rolling a casting stat + Magic Die.
 
 **Casting Stat**
-The stat you choose for a casting roll (whatever fits the action: Brains, Grit, etc.).
+The stat the GM calls for on a casting roll, based on what you are trying to accomplish (whatever fits the action: Brains, Grit, etc.).
 
 **Certified Domain**
 The field your **Specialist Certification** Strength applies to.
