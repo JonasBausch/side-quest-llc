@@ -4,9 +4,13 @@ import {
   trainingSchema,
   groupBonusGuideSchema,
   castingGuideSchema,
+  exposureGuideSchema,
+  momentumGuideSchema,
 } from './schema';
 import { groupBonusGuide } from './group-bonuses';
 import { castingGuide } from './casting';
+import { exposureGuide } from './exposure';
+import { momentumGuide } from './momentum';
 
 /**
  * The "structural tests" CLAUDE.md relies on to catch silent transcription
@@ -81,5 +85,19 @@ describe('casting guide', () => {
       'Medium',
       'Large',
     ]);
+  });
+});
+
+describe('resource guides', () => {
+  it('are structurally valid', () => {
+    expect(() => exposureGuideSchema.parse(exposureGuide)).not.toThrow();
+    expect(() => momentumGuideSchema.parse(momentumGuide)).not.toThrow();
+  });
+
+  // Both confirmed by the GM: Momentum is capped, Exposure is not.
+  it('cap Momentum at 10 and leave Exposure open-ended', () => {
+    expect(momentumGuide.cap).toBe(10);
+    expect(exposureGuide.threshold.at).toBe(3);
+    expect(exposureGuide.tally).toMatch(/does not reset/i);
   });
 });
