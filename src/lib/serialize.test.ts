@@ -186,3 +186,35 @@ describe('legacy v1 links', () => {
     expect(decodeDefinition(encodeDefinition(def))!.id).toBe(def.id);
   });
 });
+
+describe('group bonuses', () => {
+  it('round-trips unlocked bonuses', () => {
+    const def = { ...fullBuild(), groupBonuses: ['team-protocol-1', 'group-asset-2'] };
+    expect(decodeDefinition(encodeDefinition(def))?.groupBonuses).toEqual([
+      'team-protocol-1',
+      'group-asset-2',
+    ]);
+  });
+
+  it('omits the key entirely when nothing is unlocked', () => {
+    for (const def of [fullBuild(), { ...fullBuild(), groupBonuses: [] }]) {
+      const decoded = decodeDefinition(encodeDefinition(def));
+      expect(decoded?.groupBonuses).toBeUndefined();
+    }
+  });
+
+  it('still decodes a link minted before group bonuses existed', () => {
+    // v2 gained `c` additively, so an older payload simply lacks it.
+    const legacy = { ...fullBuild(), groupBonuses: ['team-protocol-1'] };
+    const encoded = encodeDefinition(legacy);
+    const wire = JSON.parse(
+      LZString.decompressFromEncodedURIComponent(encoded.slice(2)) as string,
+    );
+    delete wire.c;
+    const older =
+      '2~' + LZString.compressToEncodedURIComponent(JSON.stringify(wire));
+    const decoded = decodeDefinition(older);
+    expect(decoded?.name).toBe(legacy.name);
+    expect(decoded?.groupBonuses).toBeUndefined();
+  });
+});

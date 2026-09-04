@@ -272,6 +272,48 @@ export const exposureGuideSchema = z.object({
 export type ExposureGuide = z.infer<typeof exposureGuideSchema>;
 
 /* -------------------------------------------------------------------------- */
+/* Group Bonuses (crew upgrades bought with per-player Momentum)               */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * One purchasable crew upgrade. Rules: "SideQuest Group Bonuses".
+ *
+ * The rules group these under five headers, each priced "N Momentum per
+ * player", and several headers then list "level 1/2/3" variants. One entry
+ * here is one *level* — the smallest thing a crew can actually unlock.
+ *
+ * `frequency` is the same coarse enum used everywhere else and does the only
+ * work that matters: `perJob` levels become tick-off uses in the tracker,
+ * everything else is reference loadout. Nothing about the cost is resolved in
+ * code — the crew agrees at the table and each player records the result.
+ */
+export const groupBonusSchema = z.object({
+  id,
+  /** The upgrade family header, e.g. "Team Protocol". */
+  group: z.string().min(1),
+  name: z.string().min(1),
+  /** The "level N" label under its header; 1 when the family has no levels. */
+  level: z.number().int().min(1),
+  /** The per-player Momentum price printed on the family header. */
+  costPerPlayer: z.number().int(),
+  frequency: frequencyEnum.optional(),
+  text: z.string().min(1),
+  /** Optional GM-call note surfacing a ruleset gap for this level. */
+  note: z.string().optional(),
+});
+export type GroupBonus = z.infer<typeof groupBonusSchema>;
+
+/** Group Bonus reference: the purchase rule plus every unlockable level. */
+export const groupBonusGuideSchema = z.object({
+  /** The all-or-nothing condition from the section header. */
+  purchase: z.string().min(1),
+  /** GM-call note covering gaps that apply to the whole section. */
+  note: z.string().optional(),
+  bonuses: z.array(groupBonusSchema),
+});
+export type GroupBonusGuide = z.infer<typeof groupBonusGuideSchema>;
+
+/* -------------------------------------------------------------------------- */
 /* Character definition (shareable: URL fragment / JSON, changes ~once a job)  */
 /* -------------------------------------------------------------------------- */
 
@@ -332,6 +374,14 @@ export const characterDefinitionSchema = z.object({
   /** Every node taken, across any training and either path. */
   takenNodes: z.array(nodeRefSchema),
 
+  /**
+   * Ids of unlocked Group Bonus levels. Crew-level in the fiction, but recorded
+   * per player: the table agrees on a purchase out loud and everyone marks it,
+   * exactly as promotions work. Nothing here checks that the whole crew paid.
+   * Permanent, so it lives in the definition and survives "New job".
+   */
+  groupBonuses: z.array(id).optional(),
+
   /** Wyrd-2 choices, present only once that node is taken on the Wyrd path. */
   signatureTagId: id.optional(),
   signatureTune: tuneIdEnum.optional(),
@@ -372,7 +422,7 @@ export type ActiveCondition = z.infer<typeof activeConditionSchema>;
  * The live, per-session half of a character. Changes constantly. Strictly
  * disjoint from CharacterDefinition — they share only `characterId`. "New
  * scene" clears per-scene spent uses and zeroes Wyrd; "New job" clears
- * everything including Exposure.
+ * everything including Exposure, except Momentum, which carries between jobs.
  */
 export const sessionStateSchema = z.object({
   /** Links to CharacterDefinition.id. The only field the two halves share. */

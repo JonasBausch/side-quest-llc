@@ -142,7 +142,8 @@ Take from it:
 - Scene-state feedback. The Wyrd track changes the page background at 4 and
   again at 6, readable in peripheral vision without focusing on it.
 - Reset semantics. "New scene" clears per-scene uses and zeroes Wyrd. "New job"
-  clears everything including Exposure. These map to real table moments.
+  clears everything including Exposure, except Momentum, which carries between
+  jobs. These map to real table moments.
 - Progression as unlock. Nodes not yet taken are visible but inert, so players
   can see what a promotion buys them.
 - The visual direction: work-order stock, condensed industrial display type,

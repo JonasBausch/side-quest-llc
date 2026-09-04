@@ -1419,6 +1419,8 @@ When you **fail a roll** by **5 or more** gain **+2 Momentum**.
 
 You may have a maximum of **10 Momentum** at one time. If you have **10 Momentum** you cannot earn more until you have spent some.
 
+Momentum **carries over between jobs**. It is not reset at the end of a job, which is what makes the more expensive Group Bonuses reachable.
+
 ---
 
 **Spend Momentum (choose one):**

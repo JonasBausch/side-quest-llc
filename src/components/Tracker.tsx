@@ -11,8 +11,17 @@ import {
   wyrdTrack,
   momentumGuide,
   exposureGuide,
+  groupBonusGuide,
+  groupBonuses,
 } from '../content';
-import { STAT_META, usableAbilities, passiveAbilities } from '../lib/character';
+import {
+  STAT_META,
+  usableAbilities,
+  passiveAbilities,
+  hasGroupBonus,
+  toggleGroupBonus,
+  unlockedGroupBonuses,
+} from '../lib/character';
 import { newJob, newScene } from '../lib/storage';
 
 const MAX_MOMENTUM = 10;
@@ -21,7 +30,10 @@ interface TrackerProps {
   def: CharacterDefinition;
   session: SessionState;
   onChange: (session: SessionState) => void;
-  /** Edits the character definition. Notes are definition data, not session. */
+  /**
+   * Edits the character definition. Notes and unlocked Group Bonuses are
+   * definition data, not session — they must survive "New job".
+   */
   onDefChange: (def: CharacterDefinition) => void;
 }
 
@@ -337,6 +349,13 @@ export function Tracker({ def, session, onChange, onDefChange }: TrackerProps) {
         )}
       </section>
 
+      {/* Crew --------------------------------------------------------- */}
+      <CrewSection
+        def={def}
+        momentum={session.momentum}
+        onDefChange={onDefChange}
+      />
+
       {/* Passives + traits ------------------------------------------- */}
       {passives.length > 0 && (
         <section className="card">
@@ -383,13 +402,17 @@ export function Tracker({ def, session, onChange, onDefChange }: TrackerProps) {
         <button
           className="reset danger"
           onClick={() => {
-            if (window.confirm('New job clears everything, including Exposure. Continue?')) {
+            if (
+              window.confirm(
+                'New job clears Exposure, Wyrd, conditions and all uses. Momentum carries. Continue?',
+              )
+            ) {
               onChange(newJob(session));
             }
           }}
         >
           New job
-          <small>clears everything</small>
+          <small>clears all but Momentum</small>
         </button>
       </section>
     </div>
@@ -512,5 +535,115 @@ function UseGroup({
         );
       })}
     </div>
+  );
+}
+
+/**
+ * Group Bonuses. Crew-level in the fiction, recorded per player: the table
+ * agrees on a purchase out loud and everyone marks it here, the same way a
+ * promotion is recorded. Nothing is spent or enforced — locked levels stay
+ * visible but inert so players can see what the crew could save toward.
+ *
+ * Unlocking writes the *definition*, so a bonus survives "New job". The
+ * once-per-job levels then show up in Uses like any other ability, and it is
+ * the existing spentUses machinery that ticks and resets them.
+ */
+function CrewSection({
+  def,
+  momentum,
+  onDefChange,
+}: {
+  def: CharacterDefinition;
+  momentum: number;
+  onDefChange: (def: CharacterDefinition) => void;
+}) {
+  const unlocked = unlockedGroupBonuses(def);
+
+  const families = groupBonuses.reduce<
+    { group: string; levels: typeof groupBonuses }[]
+  >((acc, bonus) => {
+    const family = acc.find((f) => f.group === bonus.group);
+    if (family) family.levels.push(bonus);
+    else acc.push({ group: bonus.group, levels: [bonus] });
+    return acc;
+  }, []);
+
+  return (
+    <section className="card">
+      <h2>
+        Crew <span className="cap">group bonuses</span>
+      </h2>
+
+      {unlocked.length === 0 ? (
+        <p className="muted small">
+          Nothing unlocked yet. Agree a purchase at the table, then everyone
+          marks it below.
+        </p>
+      ) : (
+        <ul className="crew-owned">
+          {unlocked.map((b) => (
+            <li key={b.id}>
+              <span className="crew-owned-name">{b.name}</span>
+              <span className="crew-owned-source">{b.group}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <details className="cheat">
+        <summary>Unlock a group bonus</summary>
+        <p className="cheat-meta">{groupBonusGuide.purchase}</p>
+
+        {families.map((family) => (
+          <div key={family.group} className="crew-family">
+            <h3>
+              {family.group}
+              <span className="crew-price">
+                {family.levels[0].costPerPlayer}/player
+              </span>
+            </h3>
+            {family.levels.map((bonus) => {
+              const owned = hasGroupBonus(def, bonus.id);
+              const afford = momentum >= bonus.costPerPlayer;
+              return (
+                <label
+                  key={bonus.id}
+                  className={
+                    'crew-level' +
+                    (owned ? ' owned' : '') +
+                    (!owned && afford ? ' afford' : '')
+                  }
+                >
+                  <input
+                    type="checkbox"
+                    checked={owned}
+                    onChange={() => onDefChange(toggleGroupBonus(def, bonus.id))}
+                  />
+                  <span className="crew-body">
+                    <span className="crew-name">
+                      {family.levels.length > 1 && (
+                        <span className="crew-level-no">L{bonus.level}</span>
+                      )}
+                      {bonus.name}
+                      {bonus.frequency === 'perJob' && (
+                        <em className="crew-freq">1/job</em>
+                      )}
+                    </span>
+                    <span className="crew-text">{bonus.text}</span>
+                    {bonus.note && (
+                      <span className="crew-note">GM call: {bonus.note}</span>
+                    )}
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+        ))}
+
+        {groupBonusGuide.note && (
+          <p className="cheat-meta">GM call: {groupBonusGuide.note}</p>
+        )}
+      </details>
+    </section>
   );
 }

@@ -9,6 +9,7 @@ import type {
   Tune,
   Trait,
   Condition,
+  GroupBonus,
 } from './schema';
 
 import { artifactHandler } from './trainings/artifact-handler';
@@ -31,6 +32,7 @@ import { conditions } from './conditions';
 import { wyrdTrack } from './wyrd';
 import { momentumGuide } from './momentum';
 import { exposureGuide } from './exposure';
+import { groupBonusGuide } from './group-bonuses';
 
 /** All trainings, alphabetical by display name. */
 export const trainings: Training[] = [
@@ -56,6 +58,7 @@ export {
   wyrdTrack,
   momentumGuide,
   exposureGuide,
+  groupBonusGuide,
 };
 
 function byId<T extends { id: string }>(items: readonly T[]): Map<string, T> {
@@ -70,4 +73,8 @@ export const strengthsById = byId<Trait>(strengths);
 export const flawsById = byId<Trait>(flaws);
 export const conditionsById = byId<Condition>(conditions);
 
-export type { Training, SpellTag, Tune, Trait, Condition };
+/** Every unlockable Group Bonus level, flattened out of the guide. */
+export const groupBonuses: GroupBonus[] = groupBonusGuide.bonuses;
+export const groupBonusesById = byId<GroupBonus>(groupBonuses);
+
+export type { Training, SpellTag, Tune, Trait, Condition, GroupBonus };

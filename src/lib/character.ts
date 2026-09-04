@@ -13,7 +13,7 @@ import {
   type Path,
   type StatId,
 } from '../content/schema';
-import { trainings, trainingsById } from '../content';
+import { trainings, trainingsById, groupBonuses, groupBonusesById } from '../content';
 
 export const STAT_META: { id: StatId; name: string; use: string }[] = [
   { id: 'brains', name: 'Brains', use: 'Research, analysis, tech, and planning' },
@@ -102,6 +102,36 @@ export function toggleNode(
   };
 }
 
+/* ---- group bonuses ------------------------------------------------------ */
+
+export function hasGroupBonus(def: CharacterDefinition, id: string): boolean {
+  return (def.groupBonuses ?? []).includes(id);
+}
+
+/**
+ * Mark a Group Bonus level unlocked, or undo a mis-tap. Purely a record of what
+ * the table agreed: no Momentum is spent and no prerequisite level is required,
+ * because the rules price and sequence levels ambiguously and validation here
+ * is advisory anyway.
+ */
+export function toggleGroupBonus(
+  def: CharacterDefinition,
+  id: string,
+): CharacterDefinition {
+  const current = def.groupBonuses ?? [];
+  return {
+    ...def,
+    groupBonuses: current.includes(id)
+      ? current.filter((b) => b !== id)
+      : [...current, id],
+  };
+}
+
+/** Unlocked bonuses, in catalog order rather than the order they were marked. */
+export function unlockedGroupBonuses(def: CharacterDefinition) {
+  return groupBonuses.filter((b) => hasGroupBonus(def, b.id));
+}
+
 /** Training ids the character has touched (main + any cross-trained node). */
 export function trainingsInPlay(def: CharacterDefinition): string[] {
   const ids = new Set<string>([def.mainTrainingId]);
@@ -136,7 +166,8 @@ export interface UsableAbility {
 
 /**
  * Every ability and trait the character owns, whatever its cadence: the main
- * training's specialty, taken nodes, and the chosen trope/strength/flaw. Each
+ * training's specialty, taken nodes, the chosen trope/strength/flaw, and any
+ * unlocked Group Bonus. Each
  * carries the rules `text` so the tracker can show what it does. `frequency` is
  * undefined when the source states no cadence (e.g. a passive gear note).
  */
@@ -186,6 +217,18 @@ export function characterAbilities(
         text: pick.text ?? '',
       });
     }
+  }
+
+  for (const id of def.groupBonuses ?? []) {
+    const bonus = groupBonusesById.get(id);
+    if (!bonus) continue;
+    out.push({
+      key: `group:${bonus.id}`,
+      name: bonus.name,
+      source: `Crew · ${bonus.group}`,
+      frequency: bonus.frequency,
+      text: bonus.text,
+    });
   }
 
   return out;
