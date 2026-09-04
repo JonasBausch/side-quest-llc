@@ -180,17 +180,27 @@ export function trainingsInPlay(def: CharacterDefinition): string[] {
 }
 
 /**
- * Spell tag ids the character can pick a Signature from: the union of available
- * tags across the main training and any training in which a Wyrd node is taken.
+ * Trainings whose spell tags the character can reach: the main training, plus
+ * any training they have cross-trained a Wyrd node into. Tags come with the
+ * Wyrd Path, so a training entered on the Gear side alone contributes none.
+ */
+export function tagSourceTrainingIds(def: CharacterDefinition): string[] {
+  const ids = new Set<string>([def.mainTrainingId]);
+  for (const n of def.takenNodes) if (n.path === 'wyrd') ids.add(n.trainingId);
+  return [...ids].filter((id) => trainingsById.has(id));
+}
+
+/**
+ * Spell tag ids the character can pick a Signature from: the union across every
+ * training they can reach tags in. Rules: "Getting a Promotion" — a Signature
+ * may be any tag you have access to, from either training. The Specialty is the
+ * only thing locked to the main training.
  */
 export function availableTagIds(def: CharacterDefinition): string[] {
   const out = new Set<string>();
-  const add = (id: string) => {
-    const t = trainingsById.get(id);
-    if (t) t.availableTagIds.forEach((tag) => out.add(tag));
-  };
-  add(def.mainTrainingId);
-  for (const n of def.takenNodes) if (n.path === 'wyrd') add(n.trainingId);
+  for (const id of tagSourceTrainingIds(def)) {
+    trainingsById.get(id)?.availableTagIds.forEach((tag) => out.add(tag));
+  }
   return [...out];
 }
 

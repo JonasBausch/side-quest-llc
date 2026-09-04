@@ -1310,8 +1310,10 @@ After completing a job successfully, Sidequest LLC allows you to take an additio
 
 ---
 
-This training can be from one of the paths in your main tranining, or you can cross-train into another training, as long as you meet the prerequisites for it.
+This training can be from one of the paths in your main training, or you can cross-train into another training, as long as you meet the prerequisites for it.
 The only limitation is that you cannot take the training specialty for any training that is not your main one.
+
+Cross-training onto another training's Wyrd Path gives you that training's **spell tags** as well, and your **Signature** may be any tag you have access to, from either training.
 
 ---
 Example: Ethel is a **Research Archivist** and just completed a job with her team She currently has Gear 1 and 2 on the Mundane Path in **Research Archivist**. Ethel could either take Wyrd 1 or Gear 3 in **Research Archivist** or she could choose to take Wyrd 1 or Gear 1 from any other training module. Ethel chooses to take **Crowd Liason** Gear 1.

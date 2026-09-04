@@ -24,6 +24,7 @@ import {
   nodeKey,
   setStart,
   startingNodeRef,
+  tagSourceTrainingIds,
   toggleNode,
   trainingNodeRefs,
 } from '../lib/character';
@@ -48,6 +49,9 @@ export function Builder({ def, onChange }: BuilderProps) {
   const warnings = useMemo(() => validateDefinition(def), [def]);
   const mainTraining = trainingsById.get(def.mainTrainingId);
   const tagIds = availableTagIds(def);
+  const tagSources = tagSourceTrainingIds(def).map(
+    (id) => trainingsById.get(id)?.name ?? id,
+  );
   const hasSignatureNode = def.takenNodes.some(
     (n) => n.path === 'wyrd' && n.index === 2,
   );
@@ -202,6 +206,11 @@ export function Builder({ def, onChange }: BuilderProps) {
         {hasSignatureNode && (
           <div className="signature">
             <h3>Signature</h3>
+            <p className="muted small">
+              {tagSources.length > 1
+                ? `Tags from ${tagSources.join(' + ')} — cross-training opens both lists. Only the Specialty is locked to your main training.`
+                : `Tags from ${tagSources[0] ?? 'your training'}. Cross-train a Wyrd node and that training's tags open up too.`}
+            </p>
             <label className="field">
               <span>Spell tag</span>
               <select
