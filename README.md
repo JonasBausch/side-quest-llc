@@ -130,14 +130,16 @@ in a browser.
 ### Other commands
 
 ```
-npm run build     # typecheck (tsc -b) AND production build into dist/
-npm run preview   # serve the built dist/ locally
-npx tsc --noEmit  # typecheck only, no build
+npm run lint       # ESLint over the repo
+npm test           # run the test suite once
+npm run test:watch # keep the tests running as you edit
+npm run build      # typecheck (tsc -b) AND production build into dist/
+npm run preview    # serve the built dist/ locally
+npx tsc --noEmit   # typecheck only, no build
 ```
 
-`npm run build` is the one automated gate — there's no separate lint step or
-test runner, so `tsc` inside the build is what catches breakage. Run it before
-you commit.
+`npm run lint`, `npm test` and `npm run build` are the automated gates, and CI
+runs all three on every pull request. Run them before you commit.
 
 ---
 
