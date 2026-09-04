@@ -437,9 +437,9 @@ export type CharacterDefinition = z.infer<typeof characterDefinitionSchema>;
 /* -------------------------------------------------------------------------- */
 
 /**
- * One active condition instance. The rules leave open whether two conditions on
- * the same stat stack, so duplicates are permitted here and the UI surfaces it
- * as a GM call rather than resolving it.
+ * One active condition instance. Conditions that hit the same stat stack, so
+ * the tracker adds up every active condition on a stat and shows the total with
+ * the names behind it. The total is a reminder, not something applied to a roll.
  */
 export const activeConditionSchema = z.object({
   id: conditionIdEnum,
