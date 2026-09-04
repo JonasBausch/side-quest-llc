@@ -4,7 +4,13 @@
  */
 import type { CharacterDefinition } from '../content/schema';
 import { trainingsById } from '../content';
-import { DICE, STAT_META, availableTagIds } from './character';
+import {
+  DICE,
+  STAT_META,
+  availableTagIds,
+  hasNode,
+  startingNodeRef,
+} from './character';
 
 export function validateDefinition(def: CharacterDefinition): string[] {
   const warnings: string[] = [];
@@ -28,6 +34,16 @@ export function validateDefinition(def: CharacterDefinition): string[] {
   const dupes = assigned.filter((d, i) => assigned.indexOf(d) !== i);
   if (dupes.length) {
     warnings.push(`Same die used more than once: ${[...new Set(dupes)].join(', ')}.`);
+  }
+
+  // Creation grants the Specialty plus the first node of the starting path
+  // (Rules: "Path Options"). Advisory like everything else here — a table that
+  // rules otherwise just ignores it.
+  if (!hasNode(def, startingNodeRef(def))) {
+    const label = def.startingPath === 'wyrd' ? 'Wyrd-1' : 'Gear-1';
+    warnings.push(
+      `Characters start with the first node of their starting path (${label}); it is not taken.`,
+    );
   }
 
   // Signature choices only make sense with the Wyrd-2 node and a valid tag.

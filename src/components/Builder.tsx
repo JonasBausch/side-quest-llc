@@ -21,6 +21,9 @@ import {
   STAT_META,
   availableTagIds,
   hasNode,
+  nodeKey,
+  setStart,
+  startingNodeRef,
   toggleNode,
   trainingNodeRefs,
 } from '../lib/character';
@@ -95,7 +98,9 @@ export function Builder({ def, onChange }: BuilderProps) {
           <span>Main training</span>
           <select
             value={def.mainTrainingId}
-            onChange={(e) => update({ mainTrainingId: e.target.value })}
+            onChange={(e) =>
+              onChange(setStart(def, { mainTrainingId: e.target.value }))
+            }
           >
             {trainings.map((t) => (
               <option key={t.id} value={t.id}>
@@ -114,13 +119,18 @@ export function Builder({ def, onChange }: BuilderProps) {
                   type="radio"
                   name="startingPath"
                   checked={def.startingPath === p}
-                  onChange={() => update({ startingPath: p })}
+                  onChange={() => onChange(setStart(def, { startingPath: p }))}
                 />
                 <span>{p === 'wyrd' ? 'Wyrd' : 'Mundane'}</span>
               </label>
             ))}
           </div>
         </fieldset>
+        <p className="muted small">
+          You start play with the Specialty below plus the first node of this
+          path — Wyrd-1 or Gear-1. The Keystone is not a starting benefit; it is
+          the reward for completing all five Gear nodes.
+        </p>
 
         {mainTraining && (
           <div className="specialty">
@@ -295,10 +305,12 @@ function NodeList({
   path: Path;
   onChange: (def: CharacterDefinition) => void;
 }) {
+  const startKey = nodeKey(startingNodeRef(def));
   return (
     <div className="nodes">
       {trainingNodeRefs(trainingId, path).map(({ ref, node }) => {
         const taken = hasNode(def, ref);
+        const isStart = nodeKey(ref) === startKey;
         return (
           <button
             key={ref.index}
@@ -312,6 +324,7 @@ function NodeList({
                 {path === 'wyrd' ? 'Wyrd' : 'Gear'}-{ref.index}
               </span>
               <span className="node-name">{node.name}</span>
+              {isStart && <span className="node-start">start</span>}
               {node.cost != null && (
                 <span className="node-cost">cost {node.cost}</span>
               )}

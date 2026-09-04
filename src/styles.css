@@ -432,6 +432,20 @@ button {
   font-size: 11px;
   color: var(--ink-soft);
 }
+.node-start {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--ink-soft);
+  color: var(--ink-soft);
+  padding: 1px 5px;
+  border-radius: 2px;
+}
+.node.taken .node-start {
+  border-color: currentColor;
+  color: inherit;
+}
 .node-text {
   font-size: 13px;
   color: var(--ink-soft);

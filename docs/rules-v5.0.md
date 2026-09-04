@@ -54,7 +54,7 @@ Installs copper/iron hardware, chalk lines, and retrofit plates so sites don't r
 ### Path Options
 
 Once you have selected your first **Training** you decide whether to start down the Wyrd Path, giving you access to **Spell Tags**, or the Mundane Path, giving you access to tools and skills that help you do your job.
-Whichever path you choose, you get Keystone training for your **Training**.
+Whichever path you choose, you get the **Specialty** for your **Training**, plus the first node on that path (**Wyrd-1** or **Gear-1**).
 
 ---
 

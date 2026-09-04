@@ -46,15 +46,55 @@ function newCharacterId(): string {
 }
 
 export function emptyDefinition(): CharacterDefinition {
+  const mainTrainingId = trainings[0].id;
+  const startingPath: Path = 'mundane';
   return {
     id: newCharacterId(),
     rulesVersion: CURRENT_RULES_VERSION,
     name: '',
-    mainTrainingId: trainings[0].id,
-    startingPath: 'mundane',
-    takenNodes: [],
+    mainTrainingId,
+    startingPath,
+    takenNodes: [startingNodeRef({ mainTrainingId, startingPath })],
     statDice: {},
   };
+}
+
+/**
+ * The node a character has before earning anything: index 1 of their starting
+ * path in their main training. Rules: "Path Options" — creation grants the
+ * Training's Specialty plus either Wyrd-1 or Gear-1. The Keystone is not part
+ * of that; it is the reward for completing all five Gear nodes.
+ */
+export function startingNodeRef(def: {
+  mainTrainingId: string;
+  startingPath: Path;
+}): NodeRef {
+  return {
+    trainingId: def.mainTrainingId,
+    path: def.startingPath,
+    index: 1,
+  };
+}
+
+/**
+ * Change the main training or the starting path, carrying the free starting
+ * node across with it. Only the old starting node is dropped — cross-trained
+ * nodes and anything earned by promotion are left exactly as they are, since
+ * those were paid for and this swap is a creation-time correction.
+ */
+export function setStart(
+  def: CharacterDefinition,
+  patch: { mainTrainingId?: string; startingPath?: Path },
+): CharacterDefinition {
+  const next = { ...def, ...patch };
+  const oldKey = nodeKey(startingNodeRef(def));
+  const newRef = startingNodeRef(next);
+  const newKey = nodeKey(newRef);
+  if (oldKey === newKey) return next;
+  const kept = next.takenNodes.filter(
+    (n) => nodeKey(n) !== oldKey && nodeKey(n) !== newKey,
+  );
+  return { ...next, takenNodes: [newRef, ...kept] };
 }
 
 /* ---- node references ---------------------------------------------------- */
