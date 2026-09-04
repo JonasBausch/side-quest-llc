@@ -11,17 +11,25 @@ running.
 ```
 npm install        # once
 npm run dev        # Vite dev server with HMR (default http://localhost:5173)
+npm run lint       # ESLint over the repo
+npm test           # Vitest, single run — npm run test:watch to leave it open
 npm run build      # tsc -b && vite build — the typecheck AND the build in one
 npm run preview    # serve the production build from dist/
 ```
 
-- **`npm run build` is the only automated gate.** There is no lint step and no
-  test runner configured — `tsc -b` inside `build` is what catches breakage, so
-  run it before you commit. To typecheck alone: `npx tsc --noEmit`.
-- **The "structural tests" referred to under Working conventions are a manual
-  review discipline** (diff each training against the PDF), not an automated
-  suite. Content correctness at runtime is enforced by the Zod schemas in
-  `src/content/schema.ts`, validated as content is imported.
+- **`lint`, `test` and `build` are the automated gates**, and
+  `.github/workflows/ci.yml` runs all three on every pull request. Run them
+  before you commit. To typecheck alone: `npx tsc --noEmit`.
+- **The structural tests under Working conventions are real tests.**
+  `src/content/content.test.ts` runs the Zod schemas against every authored
+  training — content files only `satisfies Training`, which is compile-time
+  only, so without those tests the schemas never actually execute. They catch
+  the shape failures transcription makes silently: a missing specialty, a path
+  that isn't five nodes, an empty tag list, a tag id that doesn't resolve.
+  `src/lib/` has its own suite for serialization and the reset semantics.
+- **The tests do not replace reading the diff against the PDF.** No schema can
+  see that a node's *text* is subtly wrong, and that is the failure mode this
+  content is most prone to.
 - **Deploy is automatic.** Pushing to `main` triggers `.github/workflows/deploy.yml`,
   which builds and publishes `dist/` to GitHub Pages. There is nothing to run by hand.
 
