@@ -235,7 +235,7 @@ export function Tracker({ def, session, onChange, onDefChange }: TrackerProps) {
       {/* Conditions + stat cross-reference --------------------------- */}
       <section className="card">
         <h2>
-          Conditions <span className="cap">−1 to relevant rolls</span>
+          Conditions <span className="cap">−1 each · same stat stacks</span>
         </h2>
         <div className="conditions">
           {conditions.map((cond) => {
