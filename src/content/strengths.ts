@@ -4,6 +4,13 @@ import type { Trait } from './schema';
  * Strengths. Transcribed from docs/rules-v5.0.md ("Strengths"). Homebrew is
  * allowed at the character level. `frequency` follows each entry's own
  * "1/scene" or "1/job" wording; passive/situational ones carry no cadence.
+ *
+ * A cadence counts even when the entry doesn't spell it out and the player
+ * never chooses to spend it: Unshakable Calm covers "the scene's first" scare,
+ * which is once per scene however automatically it fires. What the tick-box
+ * records is whether it has already happened, and that is worth knowing.
+ * Entries bounded to something other than a scene or a job — a clock, an NPC,
+ * a day — still carry no cadence, because the enum has no such unit.
  */
 export const strengths = [
   {
@@ -84,6 +91,7 @@ export const strengths = [
     id: 'unshakable-calm',
     name: 'Unshakable Calm',
     text: `When Wyrd hits 4+, you don't take Shaken from the scene's first scare/shift.`,
+    frequency: 'perScene',
   },
   {
     id: 'vehicle-mastery',
