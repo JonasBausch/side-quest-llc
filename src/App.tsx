@@ -21,7 +21,15 @@ import { WyrdWhimsy } from './components/WyrdWhimsy';
 
 type Screen = 'build' | 'track';
 
-/** A dismissible note about how the character now on screen got here. */
+/**
+ * A dismissible note about the character now on screen.
+ *
+ * The 'imported' case deliberately does not say "imported". One banner serves
+ * two people the URL cannot tell apart: someone opening a link a friend sent,
+ * and an existing player whose own bookmark just upgraded itself from a
+ * snapshot to a pointer. Claiming provenance misreads for the second, who is
+ * every current player exactly once, on the refresh after this ships.
+ */
 type Notice =
   | { kind: 'imported' }
   /**
@@ -241,8 +249,9 @@ export function App() {
 
       {notice?.kind === 'imported' && (
         <div className="banner" role="status">
-          Imported from a link and saved on this device. The address bar now
-          points at your copy, so you can bookmark it.{' '}
+          This character is now saved on this device. The address bar points at
+          your copy instead of carrying it, so a bookmark will always open the
+          current version.{' '}
           <button className="ghost" onClick={() => setNotice(null)}>
             Dismiss
           </button>
