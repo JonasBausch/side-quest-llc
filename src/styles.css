@@ -678,6 +678,14 @@ button {
   color: var(--ink-soft);
 }
 
+/* A wrapping row of buttons — banner choices, recovery actions. */
+.row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
 /* Tracker counters ------------------------------------------------------ */
 .row-between {
   display: flex;
