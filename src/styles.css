@@ -946,6 +946,11 @@ button {
 .use-group {
   margin-bottom: 10px;
 }
+.use-note {
+  margin: 0 0 4px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
 .use {
   display: flex;
   align-items: flex-start;
@@ -985,6 +990,14 @@ button {
 }
 .use.spent .use-text {
   color: var(--ink-soft);
+}
+/* A held oath or Echo is live, not used up — marked, never struck through. */
+.use.held {
+  border-left: 3px solid var(--accent);
+  padding-left: 8px;
+}
+.use.held .use-name {
+  color: var(--accent-ink);
 }
 
 /* Kit — passives & traits (reference, no checkbox) ---------------------- */

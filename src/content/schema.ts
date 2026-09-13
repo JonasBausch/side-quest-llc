@@ -46,6 +46,10 @@ export type DieSize = z.infer<typeof dieEnum>;
  * exact limits ("2/scene", "1 active oath") stay in the prose `text`, not here.
  * Optional — specialties and passives often state no cadence, and forcing a
  * bucket would itself be a form of modelling.
+ *
+ * `counter` is the odd one: not a use you spend but something you hold — an
+ * active oath, a captured Echo. A hold lasts the job and clears with it, and
+ * the player may release one early by overwriting it (GM ruling, #11).
  */
 export const frequencyEnum = z.enum([
   'perScene',

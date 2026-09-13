@@ -34,7 +34,7 @@ const FREQ_LABEL: Record<Frequency, string> = {
   perScene: 'per scene',
   perJob: 'per job',
   passive: 'passive',
-  counter: 'counter',
+  counter: 'held',
 };
 
 interface BuilderProps {

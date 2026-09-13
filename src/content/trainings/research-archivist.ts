@@ -35,6 +35,7 @@ export const researchArchivist = {
     {
       name: `Echo Recording`,
       text: `Your magic "records" reality and can play it back. Each time you cast, you may capture one Echo: a 1–2 second sensory snippet (sound, reflection, heat-image, smell, a sentence). Later in the job, you can release an Echo to: prove something happened (to an NPC/system), bait something (trigger, lure, distraction), reconstruct a clue ("show me what the hallway looked like before it looped"). Cost: Echos are sticky. Holding more than 1 at a time makes you feel "observed" (GM can justify Marked/pressure when it fits).`,
+      frequency: 'counter',
     },
     {
       name: `D12 Wyrd Die`,

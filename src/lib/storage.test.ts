@@ -104,6 +104,46 @@ describe('newJob', () => {
   });
 });
 
+/**
+ * Holds — an active oath, a captured Echo — are `counter` abilities. GM ruling:
+ * they last the job and clear when it ends, and a player may release one early
+ * by overwriting it. So they behave like a per-job use across both resets; the
+ * difference is what a ticked box means, which is the tracker's business.
+ */
+describe('held oaths and Echoes', () => {
+  function heldFixture(): { def: CharacterDefinition; heldKey: string } {
+    const def: CharacterDefinition = {
+      ...emptyDefinition(),
+      mainTrainingId: 'negotiator',
+      takenNodes: [{ trainingId: 'negotiator', path: 'mundane', index: 4 }],
+    };
+    const heldKey = usableAbilities(def).find(
+      (a) => a.frequency === 'counter',
+    )!.key;
+    return { def, heldKey };
+  }
+
+  it('survives New scene', () => {
+    const { def, heldKey } = heldFixture();
+    const state: SessionState = {
+      ...emptySession(def.id),
+      spentUses: [heldKey],
+    };
+
+    expect(newScene(def, state).spentUses).toContain(heldKey);
+  });
+
+  it('is cleared by New job', () => {
+    const { def, heldKey } = heldFixture();
+    const state: SessionState = {
+      ...emptySession(def.id),
+      spentUses: [heldKey],
+    };
+
+    expect(newJob(state).spentUses).toEqual([]);
+  });
+});
+
 describe('group bonuses across resets', () => {
   /**
    * The whole point of storing unlocks in the definition: a crew upgrade is
