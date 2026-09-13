@@ -45,7 +45,7 @@ export function saveSession(state: SessionState): void {
 
 /**
  * "New scene": clear per-scene spent uses and zero Wyrd. Conditions, Momentum,
- * Exposure, and per-job/counter uses persist across a scene.
+ * Exposure, per-job uses and held oaths/Echoes persist across a scene.
  */
 export function newScene(
   def: CharacterDefinition,
@@ -64,8 +64,9 @@ export function newScene(
 }
 
 /**
- * "New job": clear the scene and the job — Wyrd, Exposure, conditions, and
- * every spent use.
+ * "New job": clear the scene and the job — Wyrd, Exposure, conditions, every
+ * spent use, and every hold. Oaths and Echoes are job-length by GM ruling
+ * (#11); a player releases one earlier by unticking it.
  *
  * Momentum is the one exception: it carries between jobs (GM ruling, v5.0
  * leaves it unwritten). Zeroing it would make the expensive Group Bonuses

@@ -1565,6 +1565,15 @@ Conditions apply −1 ongoing to relevant rolls until cleared.
 **Conditions stack.** Two Conditions that hit the same stat apply **−2** to it: a character who is both **Shaken** and **Winded** rolls **Fight** at −2.
 
 Clear conditions with rest, support, ritual care, medical help, safehouse downtime, or a successful stabilizing scene.
+
+---
+
+#### Ongoing holds
+
+A few abilities give you something you **hold** rather than something you spend: an **active oath** from the **Oath Tape Recorder**, an **Echo** captured by **Echo Recording**. Their limits say how many you can carry at once, not how long you carry them.
+
+**A hold lasts the job.** A new scene does not release it; it clears when the job ends. You may also let one go early by **overwriting** it — swear a new oath in place of the one you are holding, or record over an Echo.
+
 \page
 
 ### Using Wyrd

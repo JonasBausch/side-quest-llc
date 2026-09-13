@@ -122,7 +122,8 @@ export function Tracker({ def, session, onChange, onDefChange }: TrackerProps) {
   const abilities = useMemo(() => usableAbilities(def), [def]);
   const passives = useMemo(() => passiveAbilities(def), [def]);
   const perScene = abilities.filter((a) => a.frequency === 'perScene');
-  const perJob = abilities.filter((a) => a.frequency !== 'perScene');
+  const perJob = abilities.filter((a) => a.frequency === 'perJob');
+  const held = abilities.filter((a) => a.frequency === 'counter');
   const spent = new Set(session.spentUses);
 
   const activeThreshold = [...wyrdTrack.thresholds]
@@ -332,11 +333,11 @@ export function Tracker({ def, session, onChange, onDefChange }: TrackerProps) {
       {/* Uses --------------------------------------------------------- */}
       <section className="card">
         <h2>
-          Uses <span className="cap">per scene · per job</span>
+          Uses <span className="cap">per scene · per job · held</span>
         </h2>
         {abilities.length === 0 && (
           <p className="muted small">
-            No once-per-scene or once-per-job abilities taken yet.
+            No per-scene, per-job or held abilities taken yet.
           </p>
         )}
         {perScene.length > 0 && (
@@ -353,6 +354,16 @@ export function Tracker({ def, session, onChange, onDefChange }: TrackerProps) {
             abilities={perJob}
             spent={spent}
             onToggle={toggleUse}
+          />
+        )}
+        {held.length > 0 && (
+          <UseGroup
+            title="Held"
+            note="lasts the job · tick while you hold one, untick to overwrite"
+            abilities={held}
+            spent={spent}
+            onToggle={toggleUse}
+            marker="held"
           />
         )}
       </section>
@@ -556,22 +567,32 @@ function CastingCheat({ wyrd }: { wyrd: number }) {
 
 function UseGroup({
   title,
+  note,
   abilities,
   spent,
   onToggle,
+  marker = 'spent',
 }: {
   title: string;
+  note?: string;
   abilities: ReturnType<typeof usableAbilities>;
   spent: Set<string>;
   onToggle: (key: string) => void;
+  /**
+   * What a ticked box means here. A per-scene or per-job use is spent and
+   * struck through; a `counter` ability is held, which is a live state rather
+   * than a used-up one, so it reads as marked instead.
+   */
+  marker?: 'spent' | 'held';
 }) {
   return (
     <div className="use-group">
       <h3>{title}</h3>
+      {note && <p className="use-note">{note}</p>}
       {abilities.map((a) => {
         const isSpent = spent.has(a.key);
         return (
-          <label key={a.key} className={isSpent ? 'use spent' : 'use'}>
+          <label key={a.key} className={isSpent ? `use ${marker}` : 'use'}>
             <input
               type="checkbox"
               checked={isSpent}
