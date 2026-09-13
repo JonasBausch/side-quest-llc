@@ -10,7 +10,7 @@ import type { ExposureGuide } from './schema';
  * zero and no ceiling. See https://github.com/JonasBausch/side-quest-llc/issues/13.
  */
 export const exposureGuide = {
-  mark: `Witnesses/cameras catch it, alarms/damage, obvious magic, cops/security escalate, evidence left behind.`,
+  mark: `Witnesses/cameras catch it, alarms/damage, obvious Wyrd, cops/security escalate, evidence left behind.`,
   clear: `Evacuate/distract, cover story/permits, block sightlines/relocate, secure footage, clean residue/patch damage.`,
   threshold: {
     at: 3,

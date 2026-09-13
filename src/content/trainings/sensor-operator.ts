@@ -10,9 +10,9 @@ import type { Training } from '../schema';
  * the table agree with the Mundane Path Options prose, where Thermal Polaroids
  * was always printed first.
  *
- * Also: this section's Echo Recording (Wyrd-4) omits the "Cost: Echos are
- * sticky" line that Artifact Handler and Research Archivist include. Transcribed
- * as printed — the omission is preserved.
+ * Echo Recording (Wyrd-4) now carries the "Cost: Echos are sticky" line the
+ * other two trainings have, but at a limit of 2 rather than 1. Transcribed as
+ * printed.
  */
 export const sensorOperator = {
   id: 'sensor-operator',
@@ -41,7 +41,7 @@ export const sensorOperator = {
     },
     {
       name: `Echo Recording`,
-      text: `Your magic "records" reality and can play it back. Each time you cast, you may capture one Echo: a 1–2 second sensory snippet (sound, reflection, heat-image, smell, a sentence). Later in the job, you can release an Echo to: prove something happened (to an NPC/system), bait something (trigger, lure, distraction), reconstruct a clue ("show me what the hallway looked like before it looped").`,
+      text: `Your Wyrd "records" reality and can play it back. Each time you cast, you may capture one Echo: a 1–2 second sensory snippet (sound, reflection, heat-image, smell, a sentence). Later in the job, you can release an Echo to: prove something happened (to an NPC/system), bait something (trigger, lure, distraction), reconstruct a clue ("show me what the hallway looked like before it looped"). Cost: Echos are sticky. Holding more than 2 at a time makes you feel "observed" (GM can justify Marked/pressure when it fits).`,
       frequency: 'counter',
     },
     {

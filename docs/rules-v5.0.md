@@ -4,13 +4,16 @@ description: ''
 tags: []
 renderer: V3
 theme: 5ePHB
+bleedSize: {}
+safetySpace: {}
+trimSize: {}
 
 ```
 
 
 
-## Sidequest System Core
-###
+### Sidequest System Core
+
 
 
 ---
@@ -118,7 +121,14 @@ Cost: the entity remembers you; you’re **Marked** until job end.
 
 ---
 #### Mundane Path Gear Options
+
+
+#### Museum Gloves
+
 First contact with a ridden object doesn’t auto-trigger it.
+
+You may handle, inspect, reposition, or begin working with a ridden object without immediately activating its possession effect. Reckless handling or deliberately fulfilling the object’s known trigger conditions can still set it off normally.
+
 
 **Finish-Safe Extraction (1)**
 Remove an entity/object without damaging function/appearance.
@@ -195,7 +205,7 @@ Pick **one** of your spell tags as your **Signature**. Choose **one Tune** for i
 
 ---
 
-Your magic “records” reality and can play it back.
+Your Wyrd “records” reality and can play it back.
 
 * Each time you cast, you may capture one **Echo**: a 1–2 second sensory snippet (sound, reflection, heat-image, smell, a sentence).
 * Later in the job, you can release an Echo to:
@@ -247,7 +257,7 @@ If you use it later to support a cover story, it can justify clearing Exposure (
 
 **Neutralizer (1)**
 Remove one sensory hazard (smell/static/whispers/shadow stain).
-On a success, choose one: **Wyrd −1d4** (if the hazard is Wyrd-driven)
+On a success: **Wyrd −1d4**
 
 **Certification Stamp (2)**
 Once/job, declare a zone “handled” for official purposes.
@@ -312,7 +322,7 @@ Pick **one** of your spell tags as your **Signature**. Choose **one Tune** for i
 
 **Residue Economy**
 
-Magic leaves **usable residue**, and you know how to work with it.
+Wyrd leaves **usable residue**, and you know how to work with it.
 
 * When you cast, you may choose to leave a **Residue Tag** in the scene (static smear, salt bloom, mirrored scab, burnt sigil, fog of incense, etc.).
 * Once per scene, anyone can leverage a Residue Tag for a **situational advantage** (track the hazard, lock a route, reveal a hidden seam, justify a prep, etc.).
@@ -791,7 +801,7 @@ Pick **one** of your spell tags as your **Signature**. Choose **one Tune** for i
 
 **Thin-Place Etiquette**
 
-Your magic is a **negotiation with the location**.
+Your Wyrd is a **negotiation with the location**.
 
 * Once per scene, before a cast, ask: **“What does this place demand?”**
 * The GM gives a concrete demand (silence, salt line, offering, name spoken, light off, door closed, a promise, a memory, etc.).
@@ -881,7 +891,7 @@ Pick **one** of your spell tags as your **Signature**. Choose **one Tune** for i
 
 ---
 
-Your magic “records” reality and can play it back.
+Your Wyrd “records” reality and can play it back.
 
 * Each time you cast, you may capture one **Echo**: a 1–2 second sensory snippet (sound, reflection, heat-image, smell, a sentence).
 * Later in the job, you can release an Echo to:
@@ -974,7 +984,7 @@ Pick **one** of your spell tags as your **Signature**. Choose **one Tune** for i
 
 **Residue Economy**
 
-Magic leaves **usable residue**, and you know how to work with it.
+Wyrd leaves **usable residue**, and you know how to work with it.
 
 * When you cast, you may choose to leave a **Residue Tag** in the scene (static smear, salt bloom, mirrored scab, burnt sigil, fog of incense, etc.).
 * Once per scene, anyone can leverage a Residue Tag for a **situational advantage** (track the hazard, lock a route, reveal a hidden seam, justify a prep, etc.).
@@ -1074,13 +1084,13 @@ Pick **one** of your spell tags as your **Signature**. Choose **one Tune** for i
 * **Split:** your Signature can affect **+1 target** at the same scale
 * **Coded:** your Signature looks mundane on sensors unless someone is actively scanning for it
 
----
+\page
 
 **Echo Recording**
 
 ---
 
-Your magic “records” reality and can play it back.
+Your Wyrd “records” reality and can play it back.
 
 * Each time you cast, you may capture one **Echo**: a 1–2 second sensory snippet (sound, reflection, heat-image, smell, a sentence).
 * Later in the job, you can release an Echo to:
@@ -1088,8 +1098,14 @@ Your magic “records” reality and can play it back.
     * **prove** something happened (to an NPC/system),
     * **bait** something (trigger, lure, distraction),
     * **reconstruct** a clue (“show me what the hallway looked like before it looped”).
+* **Cost:** Echos are **sticky**. Holding more than 2 at a time makes you feel “observed” (GM can justify Marked/pressure when it fits).
 
+---
 \page
+
+
+
+
 
 ### Ward Carpenter
 “Home imp-rovement.”
@@ -1247,7 +1263,7 @@ These are just some examples of tropes, strengths, and flaws that you can select
 
 #### Flaws
 * **Addiction or Compulsive Vice:** Once per job, when you have downtime, you must either indulge (lose **1 Momentum**) or resist (take **−1** on your next roll).
-* **Always Short on Cash:** Start each job with **−1 gear pick** due to it not working(or one piece of gear is “cheap/low charge” and can fail, GM pick).
+* **Always Short on Cash:** You are always a little more broke than you prefer. You never have money for eating out or going to the bar. Each time you would use a new gear at the beginning of a job, roll a grit check, TN 10. On a failure, gain two momentum, and that gear doesn't work for this job.
 * **Attracts Wyrd Attention:** The **first time you cast** each job, **Wyrd +1**.
 * **Believes Their Own Hype:** If you attempt a flashy approach when a quiet one would work, take **−1** (GM call).
 * **Can’t Leave Well Enough Alone:** When you succeed on an investigation/tech/ritual action, the GM may offer “push further”; if you take it, roll again at **−1**.
@@ -1255,7 +1271,7 @@ These are just some examples of tropes, strengths, and flaws that you can select
 * **Guilt Complex:** When an ally takes a Condition, you also become **Distracted** until a stabilizing scene.
 * **Has a Nemesis:** Once per job, the GM may introduce a nemesis complication; take **−1** on your next roll against it.
 * **Haunted by Past Failure:** The first time per job you face a similar situation, take **−1** on that roll.
-* **Insomniac:** The first check you do each day, the dice is replaced by a d4.
+* **Insomniac:** The first check you do each job, the dice is replaced by a d4.
 * **Needs Control:** When the GM introduces a surprise change, your **next roll** takes **−1**.
 * **Not a People Person:** On your **first** social roll with a new NPC, take **−1**.
 * **Overconfident:** Once per scene, if you roll your “best” stat, a **failure counts as 2 failures** on the clock.
@@ -1347,7 +1363,7 @@ Examples:
 
 **Effect:** One player of the group’s choice (or by vote/roll) upgrades their Wyrd Die to the next available tier (d4→d8, d8→d12).
 
-> *You focus team resources to push one person’s magical edge to the next level.*
+> *You focus team resources to push one person’s Wyrdal edge to the next level.*
 
 ---
 ---
@@ -1405,7 +1421,7 @@ On a **max result**, add that max and roll **one die size higher**, then add the
 
 **d20:** on a d20 max, add **20** and reroll **d20**.
 
-**Magic blowup:** if the die that blows up is your **Magic Die**, **Wyrd +1**.
+**Wyrd blowup:** if the die that blows up is your **Wyrd Die**, **Wyrd +1**.
 
 ---
 #### Momentum (earned on failure)
@@ -1465,7 +1481,7 @@ Use whichever combination fits the scene:
 
     * A “beat” is typically every 2–3 rounds in combat, or each major location shift in a chase.
 
-3. **Magic stress:** On any casting roll where **any die shows a 1**, add **+1 Wyrd** and mark **Strain** (see Conditions).
+3. **Wyrd stress:** On any casting roll where **any die shows a 1**, add **+1 Wyrd** and mark **Strain** (see Conditions).
 
 This ensures escalation even when the team is competent, and it makes failure meaningfully change the texture of reality.
 
@@ -1487,7 +1503,7 @@ This ensures escalation even when the team is competent, and it makes failure me
 
 **Exposure** = how close the Wyrd is to going public.
 
-**Mark Exposure (failure):** witnesses/cameras catch it, alarms/damage, obvious magic, cops/security escalate, evidence left behind.
+**Mark Exposure (failure):** witnesses/cameras catch it, alarms/damage, obvious Wyrd, cops/security escalate, evidence left behind.
 
 **Clear Exposure (success):** evacuate/distract, cover story/permits, block sightlines/relocate, secure footage, clean residue/patch damage.
 
@@ -1560,7 +1576,7 @@ Conditions apply −1 ongoing to relevant rolls until cleared.
 * **Winded** (fatigue)- **Brawn/Fight**
 * **Distracted** (sensory distortion)- **Brains/Charm**
 * **Marked** (the phenomenon “knows you”)- **Flight/Charm**
-* **Strained** (magic overload)- **Grit/Brains**
+* **Strained** (Wyrd overload)- **Grit/Brains**
 
 **Conditions stack.** Two Conditions that hit the same stat apply **−2** to it: a character who is both **Shaken** and **Winded** rolls **Fight** at −2.
 
@@ -1582,7 +1598,7 @@ A few abilities give you something you **hold** rather than something you spend:
 
 1. **Pick spell tag** (Wardmark, Glamour, etc.)
 2. **Pick scale** (S/M/L).
-3. **Roll**: Casting Stat die **+ Magic Die** (+Skill if relevant)
+3. **Roll**: Casting Stat die **+ Wyrd Die** (+Skill if relevant)
 4. **TN by scale**:
 
 * **Small:** TN **9** (Standard)
@@ -1690,7 +1706,7 @@ A spell tag that forces a possessing presence out of objects/space. See **BANISH
 A short unit of scene time used for escalation. Typically 2–3 combat rounds, or one major shift in a chase/location.
 
 **Blowup**
-On a max roll, add that max, then roll one die size higher and add it. May chain. If the blowup die is your **Magic Die**, **Wyrd +1**.
+On a max roll, add that max, then roll one die size higher and add it. May chain. If the blowup die is your **Wyrd Die**, **Wyrd +1**.
 
 **Brains (Stat)**
 Research, analysis, tech, planning.
@@ -1702,10 +1718,10 @@ Force, lifting, breaking, carrying.
 Research Archivist module that gives a factual lead about an object/location’s history.
 
 **Casting**
-Using a spell tag and rolling a casting stat + Magic Die.
+Using a spell tag and rolling a casting stat + Wyrd Die.
 
 **Casting Stat**
-The stat the GM calls for on a casting roll, based on what you are trying to accomplish (whatever fits the action: Brains, Grit, etc.).
+The stat you choose for a casting roll (whatever fits the action: Brains, Grit, etc.).
 
 **Certified Domain**
 The field your **Specialist Certification** Strength applies to.
@@ -1812,7 +1828,7 @@ Your default structure: every high-stakes sequence is run as a clock.
 If the target resists, the area is unstable, or Wyrd ≥4, bump casting TN up one step (S→14, M→17, L→20+).
 
 **Expert (Package)**
-A no-magic starting option (in the older package framing). In the new framing, this maps to starting on Mundane Path and staying there.
+A no-Wyrd starting option (in the older package framing). In the new framing, this maps to starting on Mundane Path and staying there.
 
 **Exposure**
 How close the Wyrd is to going public.
@@ -1972,6 +1988,9 @@ A phenomenon attempting to take control of a person/body or force action.
 **Possession Roll**
 Roll Fight or Grit vs hazard TN. On failure, lose control for one beat or take one forced action (GM call), plus normal failure effects.
 
+**Pressure:**
+Pressure adds tension or stress, and can increase a clock.
+
 **Provenance Knife**
 Artifact Handler module cutting an ownership chain (symbolically) to remove a layer of claim/protection.
 
@@ -2000,7 +2019,7 @@ Research module naming the true villain of the episode’s Wyrdness; wrong raise
 A cost paid by a target/phenomenon to cross a locked threshold (per Iron Spike Kit).
 
 **Residue**
-Leftover magical “trace” in the environment.
+Leftover Wyrdal “trace” in the environment.
 
 **Residue Economy**
 Tier 2 Interface option: you can intentionally leave a Residue Tag; it can be leveraged for advantage, but becomes a trail.
@@ -2075,7 +2094,7 @@ A spell tag affecting devices/systems. See **SPARK** under Spell Tags.
 Group asset vehicle configured for containment, stealth, and security.
 
 **Spell Tag**
-A category of magic defining the effect set (WARDMARK, BINDNAME, etc.). Casting uses a tag + scale.
+A category of Wyrd defining the effect set (WARDMARK, BINDNAME, etc.). Casting uses a tag + scale.
 
 **Spellcraft (Tier 3)**
 Wyrd Tier 3 upgrade that lets you author Custom Spells.
@@ -2095,7 +2114,7 @@ The die assigned to a stat (d4/d6/d8/d10/d12/d20). Roll it for actions using tha
 A spell tag for seam-route movement. See **STEP** under Spell Tags.
 
 **Strained (Condition)**
-Magic overload. −1 when casting, focusing, or resisting magical stress.
+Wyrd overload. −1 when casting, focusing, or resisting Wyrdal stress.
 
 **Stress Rule (Casting)**
 On any casting roll where any die shows a 1: Wyrd +1 and mark Strained.
@@ -2110,7 +2129,7 @@ A higher-quality success that advances the clock by +2 (as written).
 A once-per-job group maneuver unlocked by spending group Momentum.
 
 **Thermal Polaroids**
-Sensor module: ask one SENSE question with gear; answer arrives as an image artifact.
+Sensor module: ask one SENSE question without spending a slot; answer arrives as an image artifact.
 
 **Thin Place**
 A location where reality is weak, overlaps, or “rules” are easier to break.
@@ -2158,7 +2177,7 @@ Boundary snap, cold pockets, shadow latch, bleed begins.
 A reality-altering surge; environment re-skins; objects become actively possessed; space overlays/merges.
 
 **Wyrd Path**
-The magic side of a Training track (Wyrd-1 through Wyrd-6).
+The Wyrd side of a Training track (Wyrd-1 through Wyrd-6).
 
 **Wyrd Reduction**
 Wyrd only drops when something stabilizes it (Stabilizing Scene, CLEANSE, or a group asset).
@@ -2170,6 +2189,6 @@ A progression track for Wyrd Upgrades: Tier 1 Tune, Tier 2 Interface, Tier 3 Spe
 A replacement for a gear pick: instead of taking gear, raise Wyrd Tier by 1 and gain that tier’s benefit.
 
 **Wyrd-1 / Wyrd-2 / …**
-The named nodes on the Wyrd Path (die increases and key magic options).
+The named nodes on the Wyrd Path (die increases and key Wyrd options).
 
 ---

@@ -4,9 +4,12 @@ import type { Training } from '../schema';
  * Artifact Handler — "White gloves. Bad decisions."
  * Transcribed verbatim from docs/rules-v5.0.md ("Artifact Handler").
  *
- * Gear-1 (Museum Gloves) is described by the unlabelled line under "Mundane
- * Path Gear Options" ("First contact with a ridden object doesn't auto-trigger
- * it.") and carries no cost tier. Wyrd-4 is Echo Recording, inline.
+ * Gear-1 (Museum Gloves) carries no cost tier. Wyrd-4 is Echo Recording,
+ * inline; its prose block is one v5.0 lists on the Wyrd Path table but no
+ * longer prints, so the text here is the last printed version, pending a GM
+ * ruling on whether the node stays. Its cost line reads "more than 1" here and
+ * in Research Archivist but "more than 2" in Sensor Operator — as printed in
+ * each, and also with the GM.
  */
 export const artifactHandler = {
   id: 'artifact-handler',
@@ -34,7 +37,7 @@ export const artifactHandler = {
     },
     {
       name: `Echo Recording`,
-      text: `Your magic "records" reality and can play it back. Each time you cast, you may capture one Echo: a 1–2 second sensory snippet (sound, reflection, heat-image, smell, a sentence). Later in the job, you can release an Echo to: prove something happened (to an NPC/system), bait something (trigger, lure, distraction), reconstruct a clue ("show me what the hallway looked like before it looped"). Cost: Echos are sticky. Holding more than 1 at a time makes you feel "observed" (GM can justify Marked/pressure when it fits).`,
+      text: `Your Wyrd "records" reality and can play it back. Each time you cast, you may capture one Echo: a 1–2 second sensory snippet (sound, reflection, heat-image, smell, a sentence). Later in the job, you can release an Echo to: prove something happened (to an NPC/system), bait something (trigger, lure, distraction), reconstruct a clue ("show me what the hallway looked like before it looped"). Cost: Echos are sticky. Holding more than 1 at a time makes you feel "observed" (GM can justify Marked/pressure when it fits).`,
       frequency: 'counter',
     },
     {
@@ -46,7 +49,7 @@ export const artifactHandler = {
   mundaneNodes: [
     {
       name: `Museum Gloves`,
-      text: `First contact with a ridden object doesn't auto-trigger it.`,
+      text: `First contact with a ridden object doesn't auto-trigger it. You may handle, inspect, reposition, or begin working with a ridden object without immediately activating its possession effect. Reckless handling or deliberately fulfilling the object's known trigger conditions can still set it off normally.`,
       frequency: 'passive',
     },
     {

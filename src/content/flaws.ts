@@ -16,7 +16,7 @@ export const flaws = [
   {
     id: 'always-short-on-cash',
     name: 'Always Short on Cash',
-    text: `Start each job with −1 gear pick due to it not working (or one piece of gear is "cheap/low charge" and can fail, GM pick).`,
+    text: `You are always a little more broke than you prefer. You never have money for eating out or going to the bar. Each time you would use a new gear at the beginning of a job, roll a Grit check, TN 10. On a failure, gain two Momentum, and that gear doesn't work for this job.`,
   },
   {
     id: 'attracts-wyrd-attention',
@@ -59,7 +59,8 @@ export const flaws = [
   {
     id: 'insomniac',
     name: 'Insomniac',
-    text: `The first check you do each day, the dice is replaced by a d4.`,
+    text: `The first check you do each job, the dice is replaced by a d4.`,
+    frequency: 'perJob',
   },
   {
     id: 'needs-control',

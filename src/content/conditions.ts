@@ -34,7 +34,7 @@ export const conditions = [
   {
     id: 'strained',
     name: 'Strained',
-    text: `magic overload`,
+    text: `Wyrd overload`,
     affectedStats: ['grit', 'brains'],
   },
 ] satisfies Condition[];
