@@ -40,7 +40,7 @@ export const negotiator = {
     },
     {
       name: `Thin-Place Etiquette`,
-      text: `Your magic is a negotiation with the location. Once per scene, before a cast, ask: "What does this place demand?" The GM gives a concrete demand (silence, salt line, offering, name spoken, light off, door closed, a promise, a memory, etc.). If you pay it, your cast gains a reality privilege: it sticks (harder to undo), or it can't be ignored, or it can't be disguised. Cost: the demand is real; it changes the fiction and can create obligations.`,
+      text: `Your Wyrd is a negotiation with the location. Once per scene, before a cast, ask: "What does this place demand?" The GM gives a concrete demand (silence, salt line, offering, name spoken, light off, door closed, a promise, a memory, etc.). If you pay it, your cast gains a reality privilege: it sticks (harder to undo), or it can't be ignored, or it can't be disguised. Cost: the demand is real; it changes the fiction and can create obligations.`,
       frequency: 'perScene',
     },
     {

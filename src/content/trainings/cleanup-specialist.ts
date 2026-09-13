@@ -7,8 +7,7 @@ import type { Training } from '../schema';
  * Gear-2 went by two names in v5.0 — "Trace Kit" in the leveling table and
  * "Forensics Kit" over the prose. The GM has settled it as one item called the
  * Forensics Kit, and the table has been corrected to match. Wyrd-4 is Residue
- * Economy, inline. Neutralizer's rules text is truncated in the source ("choose
- * one:" with a single option) and is transcribed as printed.
+ * Economy, inline.
  */
 export const cleanupSpecialist = {
   id: 'cleanup-specialist',
@@ -37,7 +36,7 @@ export const cleanupSpecialist = {
     },
     {
       name: `Residue Economy`,
-      text: `Magic leaves usable residue, and you know how to work with it. When you cast, you may choose to leave a Residue Tag in the scene (static smear, salt bloom, mirrored scab, burnt sigil, fog of incense, etc.). Once per scene, anyone can leverage a Residue Tag for a situational advantage (track the hazard, lock a route, reveal a hidden seam, justify a prep, etc.). Cost: each Residue Tag is also a trail. The GM can use it later to justify attention (authorities, entities, rivals, "it shows up in the records").`,
+      text: `Wyrd leaves usable residue, and you know how to work with it. When you cast, you may choose to leave a Residue Tag in the scene (static smear, salt bloom, mirrored scab, burnt sigil, fog of incense, etc.). Once per scene, anyone can leverage a Residue Tag for a situational advantage (track the hazard, lock a route, reveal a hidden seam, justify a prep, etc.). Cost: each Residue Tag is also a trail. The GM can use it later to justify attention (authorities, entities, rivals, "it shows up in the records").`,
     },
     {
       name: `D12 Wyrd Die`,
@@ -58,7 +57,7 @@ export const cleanupSpecialist = {
     },
     {
       name: `Neutralizer`,
-      text: `Remove one sensory hazard (smell/static/whispers/shadow stain). On a success, choose one: Wyrd −1d4 (if the hazard is Wyrd-driven)`,
+      text: `Remove one sensory hazard (smell/static/whispers/shadow stain). On a success: Wyrd −1d4.`,
       cost: 1,
     },
     {

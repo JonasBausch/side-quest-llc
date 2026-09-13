@@ -32,7 +32,7 @@ export const runnerDriver = {
     },
     {
       name: `Residue Economy`,
-      text: `Magic leaves usable residue, and you know how to work with it. When you cast, you may choose to leave a Residue Tag in the scene (static smear, salt bloom, mirrored scab, burnt sigil, fog of incense, etc.). Once per scene, anyone can leverage a Residue Tag for a situational advantage (track the hazard, lock a route, reveal a hidden seam, justify a prep, etc.). Cost: each Residue Tag is also a trail. The GM can use it later to justify attention (authorities, entities, rivals, "it shows up in the records").`,
+      text: `Wyrd leaves usable residue, and you know how to work with it. When you cast, you may choose to leave a Residue Tag in the scene (static smear, salt bloom, mirrored scab, burnt sigil, fog of incense, etc.). Once per scene, anyone can leverage a Residue Tag for a situational advantage (track the hazard, lock a route, reveal a hidden seam, justify a prep, etc.). Cost: each Residue Tag is also a trail. The GM can use it later to justify attention (authorities, entities, rivals, "it shows up in the records").`,
     },
     {
       name: `D12 Wyrd Die`,
