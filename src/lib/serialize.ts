@@ -1,5 +1,15 @@
 /**
- * Character definition <-> URL fragment. Session state never touches the URL.
+ * Character definition <-> URL. Session state never touches the URL.
+ *
+ * Two kinds of link exist:
+ *
+ * - A **pointer**, `?c=<id>`. Names a character, carries no data. This is what
+ *   the URL bar holds, so bookmarking it gets you the character as it is now
+ *   rather than a snapshot of it as it was. It resolves only against the
+ *   definitions stored on the device that opens it, and therefore leaks
+ *   nothing and means nothing to anyone else.
+ * - A **share link**, `?c=<id>#2~<payload>`. Carries the whole definition, and
+ *   is minted deliberately by Share. Frozen at the moment it was made.
  *
  * Two wire formats live here:
  *
@@ -53,12 +63,14 @@ const WIRE_STATS = [
 /** Trait slot order for the packed `r` triple. Frozen for the same reason. */
 const WIRE_TRAITS = ['trope', 'strength', 'flaw'] as const;
 
-const traitRegistries: Record<(typeof WIRE_TRAITS)[number], Map<string, Trait>> =
-  {
-    trope: tropesById,
-    strength: strengthsById,
-    flaw: flawsById,
-  };
+const traitRegistries: Record<
+  (typeof WIRE_TRAITS)[number],
+  Map<string, Trait>
+> = {
+  trope: tropesById,
+  strength: strengthsById,
+  flaw: flawsById,
+};
 
 /* ---- v2 wire shape ------------------------------------------------------ */
 
@@ -67,9 +79,7 @@ const traitRegistries: Record<(typeof WIRE_TRAITS)[number], Map<string, Trait>> 
  * registry (rehydrated on read), or an inline object for a homebrew pick.
  */
 type WireTrait =
-  | 0
-  | string
-  | { i?: string; n: string; x?: string; f?: Frequency };
+  0 | string | { i?: string; n: string; x?: string; f?: Frequency };
 
 interface WireV2 {
   /** rulesVersion. Always written, never defaulted — see decode. */
@@ -90,6 +100,12 @@ interface WireV2 {
   c?: string;
   /** Dice in WIRE_STATS order, `d` prefix stripped, e.g. `"10,6,8,,12,4"`. */
   d?: string;
+  /**
+   * When the sender last edited this character, epoch ms. Envelope metadata,
+   * not part of the definition: it exists so the receiver can say which of two
+   * disagreeing copies is older. Absent on links minted before it existed.
+   */
+  t?: number;
   r?: [WireTrait, WireTrait, WireTrait];
   b?: Record<string, string>;
   z?: string;
@@ -193,7 +209,7 @@ function unpackDice(packed: string | undefined): StatDice {
 
 /* ---- v2 encode / decode ------------------------------------------------- */
 
-function toWire(def: CharacterDefinition): WireV2 {
+function toWire(def: CharacterDefinition, updatedAt?: number): WireV2 {
   const traits = WIRE_TRAITS.map((slot) =>
     packTrait(def[slot], traitRegistries[slot]),
   ) as [WireTrait, WireTrait, WireTrait];
@@ -208,6 +224,7 @@ function toWire(def: CharacterDefinition): WireV2 {
     ...(def.signatureTune ? { u: def.signatureTune } : {}),
     ...(def.groupBonuses?.length ? { c: def.groupBonuses.join(',') } : {}),
     ...(packDice(def.statDice) ? { d: packDice(def.statDice) } : {}),
+    ...(updatedAt !== undefined ? { t: updatedAt } : {}),
     ...(traits.some((t) => t !== 0) ? { r: traits } : {}),
     ...(def.background ? { b: def.background } : {}),
     ...(def.notes ? { z: def.notes } : {}),
@@ -245,14 +262,28 @@ function fromWire(wire: WireV2): unknown {
 
 /* ---- public API --------------------------------------------------------- */
 
-export function encodeDefinition(def: CharacterDefinition): string {
+/** The contents of a share link: a definition plus when the sender last edited it. */
+export interface SharePayload {
+  def: CharacterDefinition;
+  updatedAt?: number;
+}
+
+/** A share payload found in the URL, or `'unreadable'` when one arrived damaged. */
+export type UrlShare = SharePayload | 'unreadable' | null;
+
+export function encodeDefinition(
+  def: CharacterDefinition,
+  updatedAt?: number,
+): string {
   return (
     V2_PREFIX +
-    LZString.compressToEncodedURIComponent(JSON.stringify(toWire(def)))
+    LZString.compressToEncodedURIComponent(
+      JSON.stringify(toWire(def, updatedAt)),
+    )
   );
 }
 
-export function decodeDefinition(encoded: string): CharacterDefinition | null {
+export function decodeShare(encoded: string): SharePayload | null {
   try {
     const isV2 = encoded.startsWith(V2_PREFIX);
     const json = LZString.decompressFromEncodedURIComponent(
@@ -260,30 +291,62 @@ export function decodeDefinition(encoded: string): CharacterDefinition | null {
     );
     if (!json) return null;
     const raw: unknown = JSON.parse(json);
-    const candidate = isV2 ? fromWire(raw as WireV2) : raw;
+    const wire = raw as WireV2;
+    const candidate = isV2 ? fromWire(wire) : raw;
     const parsed = characterDefinitionSchema.safeParse(candidate);
-    return parsed.success ? parsed.data : null;
+    if (!parsed.success) return null;
+    return {
+      def: parsed.data,
+      ...(isV2 && typeof wire.t === 'number' ? { updatedAt: wire.t } : {}),
+    };
   } catch {
     return null;
   }
 }
 
-export function readHash(): CharacterDefinition | null {
-  const hash = window.location.hash.replace(/^#/, '');
-  return hash ? decodeDefinition(hash) : null;
+export function decodeDefinition(encoded: string): CharacterDefinition | null {
+  return decodeShare(encoded)?.def ?? null;
+}
+
+/* ---- the URL ------------------------------------------------------------ */
+
+/** The character id a pointer link names, if the URL carries one. */
+export function readPointer(): string | null {
+  return new URLSearchParams(window.location.search).get('c');
 }
 
 /**
- * Write the definition into the hash without adding history entries or firing a
- * hashchange we'd have to ignore.
+ * The share payload in the fragment. A fragment that will not decode reports
+ * itself as `'unreadable'` rather than as absent: a truncated link is worth
+ * saying so about, where a bare URL is not.
  */
-export function writeHash(def: CharacterDefinition): void {
-  const encoded = encodeDefinition(def);
-  const url = `${window.location.pathname}${window.location.search}#${encoded}`;
+export function readShare(): UrlShare {
+  const hash = window.location.hash.replace(/^#/, '');
+  if (!hash) return null;
+  return decodeShare(hash) ?? 'unreadable';
+}
+
+/**
+ * Point the URL bar at `def` without adding history entries or firing a
+ * hashchange we would have to ignore.
+ *
+ * Normally that means a bare pointer — the definition itself lives on the
+ * device. When it could not be stored (private window, storage full), the full
+ * payload stays in the URL instead: a pointer would resolve to nothing on the
+ * next reload, which is the one outcome worse than a long link.
+ */
+export function writeUrl(
+  def: CharacterDefinition,
+  { persisted, updatedAt }: { persisted: boolean; updatedAt?: number },
+): void {
+  const pointer = `${window.location.pathname}?c=${encodeURIComponent(def.id)}`;
+  const url = persisted
+    ? pointer
+    : `${pointer}#${encodeDefinition(def, updatedAt)}`;
   window.history.replaceState(null, '', url);
 }
 
-/** A full shareable URL for the current definition. */
-export function shareUrl(def: CharacterDefinition): string {
-  return `${window.location.origin}${window.location.pathname}#${encodeDefinition(def)}`;
+/** A full shareable URL: the pointer, plus the definition frozen into the fragment. */
+export function shareUrl(def: CharacterDefinition, updatedAt?: number): string {
+  return `${window.location.origin}${window.location.pathname}?c=${encodeURIComponent(def.id)}#${encodeDefinition(def, updatedAt)}`;
 }

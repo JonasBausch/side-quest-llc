@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import LZString from 'lz-string';
-import { encodeDefinition, decodeDefinition } from './serialize';
+import { encodeDefinition, decodeDefinition, decodeShare } from './serialize';
 import { emptyDefinition } from './character';
 import { tropesById } from '../content';
 import type { CharacterDefinition } from '../content/schema';
@@ -23,7 +23,11 @@ const fullBuild = (): CharacterDefinition => ({
   signatureTagId: 'spark',
   signatureTune: 'fast',
   statDice: { brains: 'd12', brawn: 'd4', charm: 'd8' },
-  trope: { id: 'custom', name: 'Homebrew Trope', text: 'Made up at the table.' },
+  trope: {
+    id: 'custom',
+    name: 'Homebrew Trope',
+    text: 'Made up at the table.',
+  },
   strength: { id: 'nerves', name: 'Nerves of Steel', text: 'Unflappable.' },
   flaw: { id: 'reckless', name: 'Reckless', text: 'Leaps first.' },
   notes: 'Owes the fixer a favour.',
@@ -107,7 +111,10 @@ describe('trait rehydration', () => {
   it('keeps a homebrew trait inline', () => {
     const def: CharacterDefinition = {
       ...fullBuild(),
-      flaw: { name: 'Owes the wrong people', text: 'They know where you sleep.' },
+      flaw: {
+        name: 'Owes the wrong people',
+        text: 'They know where you sleep.',
+      },
     };
     expect(decodeDefinition(encodeDefinition(def))?.flaw).toEqual(def.flaw);
   });
@@ -153,6 +160,11 @@ describe('legacy v1 links', () => {
   const V1_LINK =
     'N4IglgJiBcIMwDMBMBDAjAIwCwGMC0ArARAGx5YDsApgBx4CcKADGnhkjnBFlQQiUwogANCABOAVwA2VAM4A1KmNlgA9gDsYILADomIkOpQBbKloBSYAC5WlGCQHMABABEqEgB4HjKMOoAqYr7qfg4AklCwCGBUUhB4Vn4A1kpKBrJWKGKJ6g4ACihWABZaAO4AnmJQopkp6gByqhByMADaoFZBfqERWtGx8TkpYmmiAA6FJbAVVQZ+zV7QSAC+wh1dIbm9sOpUDqqJhapiBhPFWsYS6hAou3PXVItoywC6oioORlYSI-4o4ZEQLIJmIkukwJ9Cj8qP4rmYoigMulMlYXGAcPDQBgNrItBA0EgDNiUKVNLBuAYcEUssY8TQQKsQJ1VGNMeBARhygkilQ2KpVGDREZTFoAELlJzFKhOUX8wVMx5WLQAZX8AEEADIAUSceQASgB5ZU6gBihoAsk41fUnAaNS4nBqwvUANI6AwIEYARwkVHUOHKWgmshUADczIyMiNcudoKBhfCQAAJVSmbFUUpOZWdP0Oc41RVac0oZpOCRjJyFSU8yUoDAyd2M9QHFqwA2lOTV6XRDxKStOBAoUOqH6NoA';
 
+  it('reports no timestamp — v1 never had an envelope', () => {
+    expect(decodeShare(V1_LINK)?.updatedAt).toBeUndefined();
+    expect(decodeShare(V1_LINK)?.def.id).toBe(decodeDefinition(V1_LINK)!.id);
+  });
+
   it('still decodes, with its uuid and node order intact', () => {
     const def = decodeDefinition(V1_LINK);
     expect(def).not.toBeNull();
@@ -189,7 +201,10 @@ describe('legacy v1 links', () => {
 
 describe('group bonuses', () => {
   it('round-trips unlocked bonuses', () => {
-    const def = { ...fullBuild(), groupBonuses: ['team-protocol-1', 'group-asset-2'] };
+    const def = {
+      ...fullBuild(),
+      groupBonuses: ['team-protocol-1', 'group-asset-2'],
+    };
     expect(decodeDefinition(encodeDefinition(def))?.groupBonuses).toEqual([
       'team-protocol-1',
       'group-asset-2',
@@ -216,5 +231,34 @@ describe('group bonuses', () => {
     const decoded = decodeDefinition(older);
     expect(decoded?.name).toBe(legacy.name);
     expect(decoded?.groupBonuses).toBeUndefined();
+  });
+});
+
+describe('share timestamp', () => {
+  it('carries when the sender last edited the character', () => {
+    const encoded = encodeDefinition(fullBuild(), 1_700_000_000_000);
+    expect(decodeShare(encoded)?.updatedAt).toBe(1_700_000_000_000);
+  });
+
+  it('omits the key when no timestamp is given', () => {
+    expect(
+      decodeShare(encodeDefinition(fullBuild()))?.updatedAt,
+    ).toBeUndefined();
+  });
+
+  it('leaves the definition untouched — the envelope is not the character', () => {
+    const def = fullBuild();
+    expect(decodeDefinition(encodeDefinition(def, 1_700_000_000_000))).toEqual(
+      def,
+    );
+  });
+
+  it('reads a link minted before timestamps existed', () => {
+    // `t` was added to v2 additively, like `c` before it: an older payload
+    // simply lacks it, and says so by reporting no date rather than a wrong one.
+    const older = encodeDefinition(fullBuild());
+    const share = decodeShare(older);
+    expect(share?.def.name).toBe(fullBuild().name);
+    expect(share?.updatedAt).toBeUndefined();
   });
 });

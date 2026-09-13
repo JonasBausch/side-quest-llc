@@ -509,6 +509,17 @@ button {
   flex: none;
 }
 
+/* The affirmative half of a choice: same shape as .ghost, filled like the
+   selected segment controls so the two read as primary and secondary. */
+.ghost.primary {
+  background: var(--ink);
+  color: var(--bg);
+}
+.ghost:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 /* Resource cheat sheets ------------------------------------------------- */
 .resource-cols {
   display: grid;
@@ -676,6 +687,14 @@ button {
 .scale-note {
   font-size: 11px;
   color: var(--ink-soft);
+}
+
+/* A wrapping row of buttons — banner choices, recovery actions. */
+.row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 /* Tracker counters ------------------------------------------------------ */

@@ -19,7 +19,9 @@ npm run preview    # serve the production build from dist/
 
 - **`lint`, `test` and `build` are the automated gates**, and
   `.github/workflows/ci.yml` runs all three on every pull request. Run them
-  before you commit. To typecheck alone: `npx tsc --noEmit`.
+  before you commit. To typecheck alone: `npx tsc -b --force` — plain
+  `tsc --noEmit` silently does nothing here, since the root tsconfig is a
+  solution file that only holds project references.
 - **The structural tests under Working conventions are real tests.**
   `src/content/content.test.ts` runs the Zod schemas against every authored
   training — content files only `satisfies Training`, which is compile-time
@@ -92,15 +94,33 @@ Vite + React + TypeScript. Deployed to GitHub Pages via GitHub Actions.
 Two data lifecycles, kept strictly separate:
 
 - **Character definition.** Training, path, nodes taken, trope, strength, flaw,
-  die assignment, name. Changes about once per job. Serialized, compressed, and
-  stored in the URL fragment so a character is a shareable link. Also
-  importable and exportable as JSON.
+  die assignment, name. Changes about once per job. Lives in localStorage under
+  `sidequest:def:<id>`, wrapped in an envelope (`{ def, updatedAt, history }`)
+  that carries a few revisions of undo. Serializable and compressed into a URL
+  for sharing, and importable/exportable as JSON.
 - **Session state.** Momentum, conditions, Wyrd, Exposure, which
-  once-per-scene uses are spent. Changes constantly. Lives in localStorage,
-  keyed by character id. Never shared.
+  once-per-scene uses are spent. Changes constantly. Lives in localStorage
+  under `sidequest:session:<id>`. Never shared.
 
 Do not let these leak into each other. A session reset must not touch the
 definition, and loading a share link must not clobber someone's live state.
+They share a medium and nothing else: separate modules, separate key prefixes,
+and `definitions.test.ts` asserts that neither writes into the other's keys.
+
+**The URL bar holds a pointer, not the character.** `?c=<id>` names a
+character; the definition itself is on the device. That is what makes a
+bookmark durable — it opens the character as it is now, not a snapshot of it as
+it was ([#51](https://github.com/JonasBausch/side-quest-llc/issues/51)). The
+Share button is what mints a link carrying the whole definition,
+`?c=<id>#2~<payload>`. Opening one never overwrites: an unknown character is
+adopted, a matching one loads silently, and a conflicting one loads the local
+copy and offers the choice. The single exception to pointer-only is a device
+that cannot persist (private window, storage full), where the full payload
+stays in the URL because a pointer would resolve to nothing on reload.
+
+The definition store reads `name` back as any string, where the rules schema
+requires a non-empty one. A build exists before anyone types a name, and
+refusing to load it back would lose real work.
 
 ## Layout
 
@@ -110,7 +130,7 @@ docs/gm-questions.md    Open questions for the GM — local only, never commit
 src/content/schema.ts   Zod schemas and inferred types
 src/content/trainings/  One file per training
 src/content/*.ts        Spell tags, tropes, strengths, flaws, conditions, wyrd
-src/lib/                Serialization, storage, validation
+src/lib/                Serialization, URL, storage, open-link resolution
 src/components/         Generic renderers
 ```
 
