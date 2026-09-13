@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   CURRENT_RULES_VERSION,
   type CharacterDefinition,
@@ -139,10 +139,16 @@ export function App() {
   // character that was never stored would send the next reload to Recovery.
   const blank = useMemo(() => isBlankDraft(def), [def]);
 
+  // Set when the next definition replaces this one wholesale rather than
+  // editing it, so the copy being superseded is kept as its own revision
+  // instead of being folded into the edit burst around it.
+  const replacing = useRef(false);
+
   // The definition lives on the device; the URL only points at it.
   useEffect(() => {
     if (recovering || blank) return;
-    const record = saveDefinition(def);
+    const record = saveDefinition(def, { checkpoint: replacing.current });
+    replacing.current = false;
     setStored(record ?? 'unavailable');
     if (!undecided) {
       writeUrl(def, {
@@ -158,10 +164,12 @@ export function App() {
     setSession(loadSession(def.id) ?? emptySession(def.id));
   }, [def.id]);
 
-  // Persist live session state, keyed by character id.
+  // Persist live session state, keyed by character id. A character nobody has
+  // started is not stored, so its session has nothing to belong to.
   useEffect(() => {
+    if (blank) return;
     saveSession(session);
-  }, [session]);
+  }, [session, blank]);
 
   // Reflect the character name in the browser tab title.
   useEffect(() => {
@@ -198,6 +206,7 @@ export function App() {
           reason={recovering.reason}
           characterId={recovering.characterId}
           onImport={(imported) => {
+            replacing.current = true;
             setDef(imported);
             setRecovering(null);
           }}
@@ -249,7 +258,9 @@ export function App() {
           <div className="row-actions">
             <button
               type="button"
+              className="ghost primary"
               onClick={() => {
+                replacing.current = true;
                 setDef(notice.incoming);
                 setNotice(null);
               }}

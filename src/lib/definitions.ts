@@ -30,6 +30,17 @@ const keyFor = (characterId: string) => `${KEY_PREFIX}${characterId}`;
 const HISTORY_LIMIT = 10;
 
 /**
+ * Edits closer together than this fold into a single revision.
+ *
+ * Every keystroke in the name field is a change, so without coalescing a
+ * fourteen-letter name burns the whole ring and the ten revisions on offer
+ * cover the last ten keystrokes — precisely the moments nobody needs back. A
+ * burst keeps the state from before it started and discards the letters in
+ * between, which is what "undo" means here.
+ */
+const COALESCE_MS = 60_000;
+
+/**
  * Definitions are read back with `name` loosened to any string. The rules
  * schema requires a non-empty name, but a character is storable from the moment
  * it exists — a player who picks a training before typing a name must not have
@@ -100,19 +111,28 @@ export function isBlankDraft(def: CharacterDefinition): boolean {
  * An unchanged definition returns the previous record untouched: re-opening a
  * share link that matches what is already here must not churn `updatedAt` or
  * push a revision that differs from its successor in nothing.
+ *
+ * `checkpoint` forces a revision that coalescing would otherwise swallow. It
+ * marks a wholesale replacement — taking a link's version over your own — where
+ * the state being superseded is the one thing worth keeping, however recently
+ * it was touched.
  */
 export function withDefinition(
   previous: StoredDefinition | null,
   def: CharacterDefinition,
   now: number,
+  { checkpoint = false }: { checkpoint?: boolean } = {},
 ): StoredDefinition {
   if (previous && sameDefinition(previous.def, def)) return previous;
-  const history = previous
-    ? [
+  if (!previous) return { def, updatedAt: now, history: [] };
+
+  const midBurst = !checkpoint && now - previous.updatedAt < COALESCE_MS;
+  const history = midBurst
+    ? previous.history
+    : [
         { def: previous.def, updatedAt: previous.updatedAt },
         ...previous.history,
-      ]
-    : [];
+      ];
   return { def, updatedAt: now, history: history.slice(0, HISTORY_LIMIT) };
 }
 
@@ -129,6 +149,13 @@ export function loadDefinition(characterId: string): StoredDefinition | null {
   }
 }
 
+export interface SaveOptions {
+  /** Overridable for tests; production always means "now". */
+  now?: number;
+  /** Force a revision even mid-burst. See `withDefinition`. */
+  checkpoint?: boolean;
+}
+
 /**
  * Persist `def`, folding the superseded revision into the ring. Returns the
  * record now on disk, or `null` when storage is unavailable — the caller needs
@@ -137,10 +164,12 @@ export function loadDefinition(characterId: string): StoredDefinition | null {
  */
 export function saveDefinition(
   def: CharacterDefinition,
-  now: number = Date.now(),
+  { now = Date.now(), checkpoint = false }: SaveOptions = {},
 ): StoredDefinition | null {
   try {
-    const next = withDefinition(loadDefinition(def.id), def, now);
+    const next = withDefinition(loadDefinition(def.id), def, now, {
+      checkpoint,
+    });
     localStorage.setItem(keyFor(def.id), JSON.stringify(next));
     return next;
   } catch {

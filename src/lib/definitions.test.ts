@@ -38,6 +38,9 @@ function named(name: string): CharacterDefinition {
   return { ...emptyDefinition(), name };
 }
 
+/** Comfortably past the coalescing window, so each write is its own revision. */
+const MINUTE = 60_000;
+
 let store: Map<string, string>;
 beforeEach(() => {
   store = installStorage();
@@ -46,7 +49,7 @@ beforeEach(() => {
 describe('saveDefinition / loadDefinition', () => {
   it('round-trips a definition', () => {
     const def = named('Jules Deveraux');
-    saveDefinition(def, 1000);
+    saveDefinition(def, { now: 1000 });
 
     expect(loadDefinition(def.id)?.def).toEqual(def);
     expect(loadDefinition(def.id)?.updatedAt).toBe(1000);
@@ -58,7 +61,7 @@ describe('saveDefinition / loadDefinition', () => {
     const draft = emptyDefinition();
     expect(draft.name).toBe('');
 
-    saveDefinition(draft, 1000);
+    saveDefinition(draft, { now: 1000 });
 
     expect(loadDefinition(draft.id)?.def.name).toBe('');
   });
@@ -88,19 +91,64 @@ describe('saveDefinition / loadDefinition', () => {
 describe('revision ring', () => {
   it('keeps the superseded revision when the definition changes', () => {
     const def = named('Jules');
-    saveDefinition(def, 1000);
-    saveDefinition({ ...def, name: 'Jules Deveraux' }, 2000);
+    saveDefinition(def, { now: 0 });
+    saveDefinition({ ...def, name: 'Jules Deveraux' }, { now: MINUTE * 5 });
 
     const record = loadDefinition(def.id)!;
     expect(record.def.name).toBe('Jules Deveraux');
     expect(record.history).toHaveLength(1);
-    expect(record.history[0]).toEqual({ def, updatedAt: 1000 });
+    expect(record.history[0]).toEqual({ def, updatedAt: 0 });
+  });
+
+  it('folds a burst of edits into one revision', () => {
+    // Typing a name is one change per keystroke. Without this, fourteen letters
+    // spend the whole ring on the last fourteen keystrokes. The burst here
+    // starts well after the character was created, so there is an earlier state
+    // that genuinely deserves keeping.
+    const def = named('J');
+    saveDefinition(def, { now: 0 });
+    for (let i = 1; i <= 14; i += 1) {
+      saveDefinition(
+        { ...def, name: 'J' + 'ules'.repeat(i) },
+        { now: MINUTE * 5 + i * 200 },
+      );
+    }
+
+    const record = loadDefinition(def.id)!;
+    expect(record.history).toHaveLength(1);
+    // What survives is the state from before the burst, not a letter part-way
+    // through it.
+    expect(record.history[0].def.name).toBe('J');
+  });
+
+  it('starts a new revision once the burst has gone quiet', () => {
+    const def = named('first');
+    saveDefinition(def, { now: 0 });
+    saveDefinition({ ...def, name: 'second' }, { now: MINUTE * 2 });
+    saveDefinition({ ...def, name: 'third' }, { now: MINUTE * 4 });
+
+    expect(loadDefinition(def.id)!.history.map((r) => r.def.name)).toEqual([
+      'second',
+      'first',
+    ]);
+  });
+
+  it('checkpoints a wholesale replacement even mid-burst', () => {
+    // Taking a link's version seconds after editing is exactly when the local
+    // copy most needs keeping.
+    const def = named('mine');
+    saveDefinition(def, { now: 0 });
+    saveDefinition({ ...def, name: 'theirs' }, { now: 900, checkpoint: true });
+
+    expect(loadDefinition(def.id)!.history.map((r) => r.def.name)).toEqual([
+      'mine',
+    ]);
   });
 
   it('does not churn on an unchanged write', () => {
     const def = named('Jules');
-    saveDefinition(def, 1000);
-    saveDefinition(def, 2000);
+    saveDefinition(def, { now: 1000 });
+    saveDefinition(def, { now: 2000 });
 
     const record = loadDefinition(def.id)!;
     // Re-saving identical data must not bump updatedAt: that timestamp is what
@@ -111,9 +159,9 @@ describe('revision ring', () => {
 
   it('caps history at ten revisions, newest first', () => {
     const def = named('rev0');
-    saveDefinition(def, 0);
+    saveDefinition(def, { now: 0 });
     for (let i = 1; i <= 14; i += 1) {
-      saveDefinition({ ...def, name: `rev${i}` }, i * 1000);
+      saveDefinition({ ...def, name: `rev${i}` }, { now: i * MINUTE * 2 });
     }
 
     const record = loadDefinition(def.id)!;
@@ -205,8 +253,8 @@ describe('listDefinitions', () => {
   it('returns every character, most recently edited first', () => {
     const a = named('Older');
     const b = named('Newer');
-    saveDefinition(a, 1000);
-    saveDefinition(b, 3000);
+    saveDefinition(a, { now: 1000 });
+    saveDefinition(b, { now: 3000 });
 
     expect(listDefinitions().map((r) => r.def.name)).toEqual([
       'Newer',
@@ -215,7 +263,7 @@ describe('listDefinitions', () => {
   });
 
   it('ignores keys from other namespaces', () => {
-    saveDefinition(named('Jules'), 1000);
+    saveDefinition(named('Jules'), { now: 1000 });
     saveSession(emptySession('some-other-id'));
     store.set('unrelated:key', 'whatever');
 
@@ -226,7 +274,7 @@ describe('listDefinitions', () => {
 describe('the two lifecycles stay disjoint', () => {
   it('deleting a definition leaves session state alone, and vice versa', () => {
     const def = named('Jules');
-    saveDefinition(def, 1000);
+    saveDefinition(def, { now: 1000 });
     saveSession({ ...emptySession(def.id), momentum: 4 });
 
     deleteDefinition(def.id);
@@ -237,7 +285,7 @@ describe('the two lifecycles stay disjoint', () => {
 
   it('a session reset writes nothing into the definition namespace', () => {
     const def = named('Jules');
-    saveDefinition(def, 1000);
+    saveDefinition(def, { now: 1000 });
     const before = store.get(`sidequest:def:${def.id}`);
 
     saveSession(newJob({ ...emptySession(def.id), momentum: 4, wyrd: 6 }));
@@ -250,7 +298,7 @@ describe('the two lifecycles stay disjoint', () => {
     saveSession({ ...emptySession(def.id), momentum: 4 });
     const before = store.get(`sidequest:session:${def.id}`);
 
-    saveDefinition({ ...def, name: 'Renamed' }, 2000);
+    saveDefinition({ ...def, name: 'Renamed' }, { now: 2000 });
 
     expect(store.get(`sidequest:session:${def.id}`)).toBe(before);
   });

@@ -84,7 +84,12 @@ export function Recovery({
         {error && <p className="warn-text">{error}</p>}
 
         <div className="row-actions">
-          <button type="button" onClick={apply} disabled={!draft.trim()}>
+          <button
+            type="button"
+            className="ghost primary"
+            onClick={apply}
+            disabled={!draft.trim()}
+          >
             Import character
           </button>
           <button type="button" className="ghost" onClick={onStartNew}>
